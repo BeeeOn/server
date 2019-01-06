@@ -14,6 +14,9 @@ BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &AsyncGatewayRPC::setGatewayCommunicator)
 BEEEON_OBJECT_PROPERTY("responseExpectedQueue", &AsyncGatewayRPC::setGWResponseExpectedQueue)
 BEEEON_OBJECT_PROPERTY("defaultTimeout", &AsyncGatewayRPC::setDefaultTimeout)
+BEEEON_OBJECT_PROPERTY("transactionManager", &AsyncGatewayRPC::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("devicePropertyDao", &AsyncGatewayRPC::setDevicePropertyDao)
+BEEEON_OBJECT_PROPERTY("cryptoConfig", &AsyncGatewayRPC::setCryptoConfig)
 BEEEON_OBJECT_END(BeeeOn, AsyncGatewayRPC)
 
 using namespace std;
@@ -43,6 +46,37 @@ void AsyncGatewayRPC::pairDevice(GatewayRPCHandler::Ptr handler,
 	request->setID(callID);
 	request->setDeviceID(device.id());
 	request->setRefresh(device.refresh());
+
+	map<string, string> properties;
+
+	if (!m_cryptoConfig.isNull()) {
+		list<DeviceProperty> tmp;
+		BEEEON_TRANSACTION(m_propertyDao->fetchByDevice(tmp, device));
+
+		for (const auto &property : tmp) {
+			if (!property.key().isGatewayReadable())
+				continue;
+
+			if (logger().debug()) {
+				logger().debug(
+					property.key().toString() + ": '"
+						+ property.value() + "' '"
+						+ property.params().toString() + "'",
+					__FILE__, __LINE__);
+			}
+
+			try {
+				DecryptedDeviceProperty decrypted(property, m_cryptoConfig);
+
+				properties.emplace(
+					decrypted.key().toString(),
+					decrypted.asString());
+			}
+			BEEEON_CATCH_CHAIN(logger())
+		}
+	}
+
+	request->setProperties(properties);
 
 	sendAndExpectResult(gateway.id(), callID, handler, request, m_defaultTimeout);
 }
@@ -374,4 +408,14 @@ void AsyncGatewayRPC::setGatewayCommunicator(GatewayCommunicator::Ptr communicat
 void AsyncGatewayRPC::setGWResponseExpectedQueue(GWResponseExpectedQueue::Ptr queue)
 {
 	m_responseExpectedQueue = queue;
+}
+
+void AsyncGatewayRPC::setDevicePropertyDao(DevicePropertyDao::Ptr dao)
+{
+	m_propertyDao = dao;
+}
+
+void AsyncGatewayRPC::setCryptoConfig(SharedPtr<CryptoConfig> config)
+{
+	m_cryptoConfig = config;
 }

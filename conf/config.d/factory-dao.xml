@@ -48,6 +48,9 @@
 			<set name="gatewayCommunicator" ref="gatewayCommunicator" />
 			<set name="responseExpectedQueue" ref="responseExpectedQueue" />
 			<set name="defaultTimeout" time="${gateway-rpc.async.defaultTimeout}" />
+			<set name="devicePropertyDao" ref="devicePropertyDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
 		</instance>
 
 		<alias name="gatewayRPC" ref="${gateway-rpc.type}GatewayRPC" />

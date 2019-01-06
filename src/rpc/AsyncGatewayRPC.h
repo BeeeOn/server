@@ -3,6 +3,7 @@
 #include <Poco/SharedPtr.h>
 #include <Poco/Util/Timer.h>
 
+#include "dao/DevicePropertyDao.h"
 #include "gwmessage/GWRequest.h"
 #include "gws/GatewayCommunicator.h"
 #include "gws/GWResponseExpectedQueue.h"
@@ -11,6 +12,8 @@
 #include "model/GlobalID.h"
 #include "rpc/GatewayRPC.h"
 #include "rpc/GatewayRPCResult.h"
+#include "transaction/Transactional.h"
+#include "util/CryptoConfig.h"
 #include "util/Loggable.h"
 #include "util/LambdaTimerTask.h"
 
@@ -33,7 +36,7 @@ class AsyncGatewayRPC :
 	public GatewayRPC,
 	public RPCForwarder,
 	public StoppableLoop,
-	protected Loggable {
+	public Transactional {
 public:
 	typedef Poco::SharedPtr<AsyncGatewayRPC> Ptr;
 
@@ -76,6 +79,8 @@ public:
 	void setDefaultTimeout(const Poco::Timespan &timeout);
 	void setGatewayCommunicator(GatewayCommunicator::Ptr communicator);
 	void setGWResponseExpectedQueue(GWResponseExpectedQueue::Ptr queue);
+	void setDevicePropertyDao(DevicePropertyDao::Ptr dao);
+	void setCryptoConfig(Poco::SharedPtr<CryptoConfig> config);
 
 private:
 	/**
@@ -138,6 +143,8 @@ private:
 	Poco::Timespan m_defaultTimeout;
 	GatewayCommunicator::Ptr m_gatewayCommunicator;
 	GWResponseExpectedQueue::Ptr m_responseExpectedQueue;
+	DevicePropertyDao::Ptr m_propertyDao;
+	Poco::SharedPtr<CryptoConfig> m_cryptoConfig;
 
 	ContextMap m_contexts;
 	Poco::FastMutex m_mutex;
