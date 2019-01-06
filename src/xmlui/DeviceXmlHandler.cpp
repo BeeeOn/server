@@ -185,6 +185,11 @@ void DeviceXmlHandler::handleCreateParameter(const string &gateid,
 	property.setKey(DevicePropertyKey::parse(
 			deviceNode->getAttribute("parameterkey")));
 
+	if (!property.key().isUserWritable()) {
+		resultInvalidInput();
+		return;
+	}
+
 	RelationWithData<DeviceProperty, Device> input(property, deserializer, device);
 	User user(session()->userID());
 	input.setUser(user);
@@ -207,6 +212,11 @@ void DeviceXmlHandler::handleUpdateParameter(const string &gateid,
 	property.setKey(DevicePropertyKey::parse(
 			deviceNode->getAttribute("parameterkey")));
 
+	if (!property.key().isUserWritable()) {
+		resultInvalidInput();
+		return;
+	}
+
 	RelationWithData<DeviceProperty, Device> input(property, deserializer, device);
 	User user(session()->userID());
 	input.setUser(user);
@@ -228,11 +238,7 @@ void DeviceXmlHandler::handleDeleteParameter(const string &gateid,
 	property.setKey(DevicePropertyKey::parse(
 			deviceNode->getAttribute("parameterkey")));
 
-	switch (property.key().raw()) {
-	case DevicePropertyKey::KEY_IP_ADDRESS:
-	case DevicePropertyKey::KEY_PASSWORD:
-		break;
-	default:
+	if (!property.key().isUserWritable()) {
 		resultInvalidInput();
 		return;
 	}

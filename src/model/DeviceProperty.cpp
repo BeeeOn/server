@@ -23,6 +23,89 @@ EnumHelper<DevicePropertyKey::Raw>::ValueMap &DevicePropertyKeyEnum::valueMap()
 	return valueMap;
 }
 
+bool DevicePropertyKeyEnum::isUserWritable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return true;
+	case KEY_FIRMWARE:
+		return false;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+bool DevicePropertyKeyEnum::isUserReadable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return false;
+	case KEY_FIRMWARE:
+		return true;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+bool DevicePropertyKeyEnum::isGatewayWritable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return false;
+	case KEY_FIRMWARE:
+		return true;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+bool DevicePropertyKeyEnum::isGatewayReadable() const
+{
+	switch (static_cast<const DevicePropertyKey &>(*this).raw()) {
+	case KEY_IP_ADDRESS:
+		return true;
+	case KEY_PASSWORD:
+		return true;
+	case KEY_FIRMWARE:
+		return true;
+	case KEY_INVALID:
+		break;
+	}
+
+	return false;
+}
+
+CryptoParams DevicePropertyKeyEnum::deriveParams(const CryptoConfig &config) const
+{
+	const auto &key = static_cast<const DevicePropertyKey &>(*this);
+	switch (key.raw()) {
+	case KEY_IP_ADDRESS:
+		return config.deriveParams();
+	case KEY_PASSWORD:
+		return config.deriveParams();
+	case KEY_FIRMWARE:
+		return CryptoParams::createEmpty();
+	case KEY_INVALID:
+		return CryptoParams::createEmpty();
+	}
+
+	throw IllegalStateException(
+		"cannot create crypto params for property key '"
+		+ key.toString() + "'");
+}
+
 DeviceProperty::DeviceProperty():
 	m_key(DevicePropertyKey::fromRaw(DevicePropertyKey::KEY_INVALID))
 {
@@ -105,6 +188,51 @@ string DeviceProperty::asFirmware() const
 	return m_value;
 }
 
+void DeviceProperty::setFromString(
+		const string &input,
+		const CryptoConfig &config)
+{
+	CipherFactory &factory = CipherFactory::defaultFactory();
+	AutoPtr<Cipher> cipher;
+
+	switch (key().raw()) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+		cipher = factory.createCipher(config.createKey(params()));
+		setIPAddress(IPAddress::parse(input), cipher);
+		break;
+
+	case DevicePropertyKey::KEY_PASSWORD:
+		cipher = factory.createCipher(config.createKey(params()));
+		setPassword(input, cipher);
+		break;
+
+	case DevicePropertyKey::KEY_FIRMWARE:
+		setFirmware(input);
+		break;
+
+	case DevicePropertyKey::KEY_INVALID:
+		throw InvalidArgumentException(
+			"device property '" + key().toString() + "' cannot be parsed");
+
+	}
+}
+
+string DeviceProperty::asString(AutoPtr<Cipher> cipher) const
+{
+	switch (m_key) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+		return asIPAddress(cipher).toString();
+	case DevicePropertyKey::KEY_PASSWORD:
+		return asPassword(cipher);
+	case DevicePropertyKey::KEY_FIRMWARE:
+		return asFirmware();
+	case DevicePropertyKey::KEY_INVALID:
+		break;
+	}
+
+	throw IllegalStateException("unable to stringize property " + m_key.toString());
+}
+
 void DeviceProperty::setParams(const CryptoParams &params)
 {
 	m_params = params;
@@ -145,15 +273,17 @@ IPAddress DecryptedDeviceProperty::asIPAddress() const
 	return m_property.asIPAddress(m_cipher);
 }
 
-string DecryptedDeviceProperty::asPassword(bool placeholder) const
+string DecryptedDeviceProperty::asPassword() const
 {
-	if (placeholder)
-		return "*****";
-	else
-		return m_property.asPassword(m_cipher);
+	return m_property.asPassword(m_cipher);
 }
 
 string DecryptedDeviceProperty::asFirmware() const
 {
 	return m_property.asFirmware();
+}
+
+string DecryptedDeviceProperty::asString() const
+{
+	return m_property.asString(m_cipher);
 }
