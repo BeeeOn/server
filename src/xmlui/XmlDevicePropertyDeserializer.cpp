@@ -33,7 +33,6 @@ void XmlDevicePropertyDeserializer::full(DeviceProperty &property) const
 void XmlDevicePropertyDeserializer::deserialize(DeviceProperty &property) const
 {
 	assureXmlValid();
-	assureValid(property);
 
 	const string &value = m_node.getAttribute("parametervalue");
 
@@ -48,25 +47,4 @@ void XmlDevicePropertyDeserializer::assureXmlValid() const
 
 	if (!m_node.hasAttribute("parametervalue"))
 		throw InvalidArgumentException("missing parametervalue for device property");
-}
-
-void XmlDevicePropertyDeserializer::assureValid(const DeviceProperty &property) const
-{
-	switch (property.key().raw()) {
-	case DevicePropertyKey::KEY_IP_ADDRESS:
-	case DevicePropertyKey::KEY_PASSWORD:
-		if (m_config == NULL) {
-			throw IllegalStateException(
-				"missing CryptoConfig to process parameterkey: "
-				+ property.key().toString()
-			);
-		}
-
-		break;
-	default:
-		throw InvalidArgumentException(
-			"unexpected parameterkey value: "
-			+ property.key().toString()
-		);
-	}
 }

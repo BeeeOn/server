@@ -18,7 +18,6 @@ public:
 protected:
 	void deserialize(DeviceProperty &property) const;
 	void assureXmlValid() const;
-	void assureValid(const DeviceProperty &property) const;
 
 private:
 	const Poco::XML::Element &m_node;
