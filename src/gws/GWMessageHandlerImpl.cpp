@@ -345,8 +345,17 @@ DeviceDescription GWMessageHandlerImpl::sanitizeDeviceDescription(
 	des.setID(description.id());
 	des.setVendor(Sanitize::common(description.vendor()));
 	des.setProductName(Sanitize::common(description.productName()));
+	des.setName(Sanitize::common(description.name()));
 	des.setDataTypes(description.dataTypes());
 	des.setRefreshTime(description.refreshTime());
+	des.setFirmware(Sanitize::common(description.firmware()));
+
+	if (!description.ipAddress().isNull())
+		des.setIPAddress(description.ipAddress());
+	if (!description.macAddress().isNull())
+		des.setMACAddress(description.macAddress());
+	if (!description.serialNumber().isNull())
+		des.setSerialNumber(description.serialNumber());
 
 	return des;
 }
