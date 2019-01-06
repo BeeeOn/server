@@ -185,6 +185,10 @@ protected:
 	bool tryActivateAndUpdate(Device &device,
 			const Gateway &gateway, bool forceUpdate = false);
 
+	bool doRegisterFirst(Device &device,
+			const DeviceDescription &description);
+	bool doRegisterUpdate(Device &device,
+			const DeviceDescription &description);
 	bool doRegisterDevice(Device &device,
 			const DeviceDescription &description,
 			const Gateway &gateway);

@@ -492,38 +492,57 @@ SharedPtr<DeviceInfo> DeviceServiceImpl::verifyDescription(
 	return type;
 }
 
+bool DeviceServiceImpl::doRegisterFirst(
+		Device &device,
+		const DeviceDescription &description)
+{
+	if (!description.name().empty())
+		device.setName(description.name());
+	else
+		device.setName(description.productName());
+
+	device.setType(verifyDescription(description));
+
+	DeviceStatus &status = device.status();
+
+	status.setFirstSeen(Timestamp());
+	status.setLastSeen(Timestamp());
+	status.setState(DeviceStatus::STATE_INACTIVE);
+	status.setLastChanged({});
+
+	return m_deviceDao->insert(device, device.gateway());
+}
+
+bool DeviceServiceImpl::doRegisterUpdate(
+		Device &device,
+		const DeviceDescription &description)
+{
+	auto type = verifyDescription(description);
+
+	if (type != device.type()) {
+		throw IllegalStateException(
+			"description " + description.toString()
+			+ " has non-matching device type for device " + device);
+	}
+
+	if (!description.name().empty())
+		device.setName(description.name());
+
+	device.status().setLastSeen(Timestamp());
+
+	return m_deviceDao->update(device, device.gateway());
+}
+
 bool DeviceServiceImpl::doRegisterDevice(Device &device,
 		const DeviceDescription &description,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
-		auto type = verifyDescription(description);
-
-		if (type != device.type()) {
-			throw IllegalStateException(
-				"description " + description.toString()
-				+ " has non-matching device type for device " + device);
-		}
-
-		if (!description.productName().empty())
-			device.setName(description.productName());
-
-		device.status().setLastSeen(Timestamp());
-
-		return m_deviceDao->update(device, gateway);
+		return doRegisterUpdate(device, description);
 	}
 	else {
-		device.setName(description.productName());
-		device.setType(verifyDescription(description));
-
-		DeviceStatus &status = device.status();
-
-		status.setFirstSeen(Timestamp());
-		status.setLastSeen(Timestamp());
-		status.setState(DeviceStatus::STATE_INACTIVE);
-		status.setLastChanged({});
-
-		return m_deviceDao->insert(device, gateway);
+		device.setGateway(gateway);
+		return doRegisterFirst(device, description);
 	}
 }
 
