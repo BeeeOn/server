@@ -6,6 +6,7 @@
 #include <Poco/Crypto/Cipher.h>
 #include <Poco/Net/IPAddress.h>
 
+#include "net/MACAddress.h"
 #include "util/CryptoParams.h"
 #include "util/Enum.h"
 
@@ -32,6 +33,10 @@ public:
 		 * Information about detected firmware in the target device.
 		 */
 		KEY_FIRMWARE = 3,
+		/**
+		 * MAC Address of the associated device.
+		 */
+		KEY_MAC_ADDRESS = 4,
 	};
 
 	/**
@@ -89,12 +94,14 @@ public:
 	void setIPAddress(const Poco::Net::IPAddress &address, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 	void setPassword(const std::string &password, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 	void setFirmware(const std::string &firmware);
+	void setMACAddress(const MACAddress &address, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 
 	void setFromString(const std::string &input, const CryptoConfig &config);
 
 	Poco::Net::IPAddress asIPAddress(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asPassword(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asFirmware() const;
+	MACAddress asMACAddress(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 
 	std::string asString(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 
@@ -118,6 +125,7 @@ public:
 	std::string asPassword() const;
 	std::string asFirmware() const;
 	std::string asString() const;
+	MACAddress asMACAddress() const;
 
 private:
 	const DeviceProperty &m_property;

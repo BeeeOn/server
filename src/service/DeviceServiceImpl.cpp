@@ -583,6 +583,12 @@ static Nullable<string> extractValue(
 
 		return description.firmware();
 
+	case DevicePropertyKey::KEY_MAC_ADDRESS:
+		if (description.macAddress().isNull())
+			return {};
+
+		return description.macAddress().value(':').toString();
+
 	default:
 		return {};
 	}

@@ -62,7 +62,7 @@ class TestDevicesPropertiesKeys(unittest.TestCase):
 		result = json.loads(content)
 		self.assertEqual("success", result["status"])
 
-		self.assertEqual(3, len(result["data"]))
+		self.assertEqual(4, len(result["data"]))
 
 		self.assertEqual("ip-address", result["data"][0]["key"]);
 		self.assertEqual("IP address", result["data"][0]["display_name"]);
@@ -76,6 +76,10 @@ class TestDevicesPropertiesKeys(unittest.TestCase):
 		self.assertEqual("firmware", result["data"][2]["key"]);
 		self.assertEqual("Firmware", result["data"][2]["display_name"]);
 		self.assertTrue(result["data"][2]["read-only"]);
+
+		self.assertEqual("mac-address", result["data"][3]["key"]);
+		self.assertEqual("MAC address", result["data"][3]["display_name"]);
+		self.assertTrue(result["data"][3]["read-only"]);
 
 if __name__ == '__main__':
 	import sys
