@@ -35,21 +35,9 @@ void XmlDevicePropertyDeserializer::deserialize(DeviceProperty &property) const
 	assureXmlValid();
 	assureValid(property);
 
-	switch (property.key().raw()) {
-	case DevicePropertyKey::KEY_IP_ADDRESS:
-	case DevicePropertyKey::KEY_PASSWORD:
-		property.setParams(m_config->deriveParams());
-		break;
-	default:
-		property.setParams(CryptoParams::createEmpty());
-	}
-
-	applyTo(property);
-}
-
-void XmlDevicePropertyDeserializer::applyTo(DeviceProperty &property) const
-{
 	const string &value = m_node.getAttribute("parametervalue");
+
+	property.setParams(property.key().deriveParams(*m_config));
 	property.setFromString(value, *m_config);
 }
 

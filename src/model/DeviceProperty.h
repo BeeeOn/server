@@ -54,6 +54,12 @@ public:
 	 */
 	bool isGatewayReadable() const;
 
+	/**
+	 * @brief Derive crypto params for property of this key.
+	 * Some keys might require encryption while others might not.
+	 */
+	CryptoParams deriveParams(const CryptoConfig &config) const;
+
 	static EnumHelper<Raw>::ValueMap &valueMap();
 };
 

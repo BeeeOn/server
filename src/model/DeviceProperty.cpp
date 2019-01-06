@@ -87,6 +87,25 @@ bool DevicePropertyKeyEnum::isGatewayReadable() const
 	return false;
 }
 
+CryptoParams DevicePropertyKeyEnum::deriveParams(const CryptoConfig &config) const
+{
+	const auto &key = static_cast<const DevicePropertyKey &>(*this);
+	switch (key.raw()) {
+	case KEY_IP_ADDRESS:
+		return config.deriveParams();
+	case KEY_PASSWORD:
+		return config.deriveParams();
+	case KEY_FIRMWARE:
+		return CryptoParams::createEmpty();
+	case KEY_INVALID:
+		return CryptoParams::createEmpty();
+	}
+
+	throw IllegalStateException(
+		"cannot create crypto params for property key '"
+		+ key.toString() + "'");
+}
+
 DeviceProperty::DeviceProperty():
 	m_key(DevicePropertyKey::fromRaw(DevicePropertyKey::KEY_INVALID))
 {
