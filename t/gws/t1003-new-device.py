@@ -242,7 +242,8 @@ class TestNewDevice(unittest.TestCase):
 					"type" : "availability",
 					"attributes" : []
 				}
-			]
+			],
+			"serial_number": "122342341231"
 		})
 
 		self.ws.send(msg1)
@@ -274,7 +275,8 @@ class TestNewDevice(unittest.TestCase):
 					"type" : "availability",
 					"attributes" : []
 				}
-			]
+			],
+			"serial_number": "122342341231"
 		})
 
 		self.ws.send(msg2)

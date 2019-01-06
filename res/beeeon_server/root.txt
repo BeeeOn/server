@@ -337,6 +337,7 @@ root {
 			password { "Password" }
 			firmware { "Firmware" }
 			mac-address { "MAC address" }
+			serial { "Serial number" }
 		}
 	}
 }

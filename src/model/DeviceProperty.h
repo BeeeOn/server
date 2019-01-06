@@ -37,6 +37,10 @@ public:
 		 * MAC Address of the associated device.
 		 */
 		KEY_MAC_ADDRESS = 4,
+		/**
+		 * Serial number of the associated device.
+		 */
+		KEY_SERIAL_NUMBER = 5,
 	};
 
 	/**
@@ -95,6 +99,7 @@ public:
 	void setPassword(const std::string &password, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 	void setFirmware(const std::string &firmware);
 	void setMACAddress(const MACAddress &address, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
+	void setSerial(const uint64_t serial, Poco::AutoPtr<Poco::Crypto::Cipher> cipher);
 
 	void setFromString(const std::string &input, const CryptoConfig &config);
 
@@ -102,6 +107,7 @@ public:
 	std::string asPassword(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 	std::string asFirmware() const;
 	MACAddress asMACAddress(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
+	uint64_t asSerial(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 
 	std::string asString(Poco::AutoPtr<Poco::Crypto::Cipher> cipher) const;
 
@@ -126,6 +132,7 @@ public:
 	std::string asFirmware() const;
 	std::string asString() const;
 	MACAddress asMACAddress() const;
+	uint64_t asSerial() const;
 
 private:
 	const DeviceProperty &m_property;
