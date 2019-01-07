@@ -15,7 +15,7 @@ public:
 			const Poco::AutoPtr<Poco::XML::Document> input,
 			BeeeOn::Session::Ptr session,
 			BeeeOn::DeviceService &deviceService,
-			BeeeOn::CryptoConfig *config);
+			Poco::SharedPtr<BeeeOn::CryptoConfig> config);
 	void handleInputImpl() override;
 
 	void handleCreateParameter(const std::string &gateid,
@@ -36,7 +36,7 @@ public:
 
 private:
 	DeviceService &m_deviceService;
-	CryptoConfig *m_config;
+	Poco::SharedPtr<CryptoConfig> m_config;
 };
 
 class DeviceXmlHandlerResolver : public SessionXmlHandlerResolver {
@@ -58,13 +58,13 @@ public:
 		m_sessionManager = manager;
 	}
 
-	void setCryptoConfig(CryptoConfig *config)
+	void setCryptoConfig(Poco::SharedPtr<CryptoConfig> config)
 	{
 		m_config = config;
 	}
 
 private:
-	BeeeOn::CryptoConfig *m_config;
+	Poco::SharedPtr<BeeeOn::CryptoConfig> m_config;
 	BeeeOn::DeviceService *m_deviceService;
 	BeeeOn::SessionManager *m_sessionManager;
 };

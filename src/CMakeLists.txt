@@ -375,11 +375,13 @@ add_library(BeeeOnServerXmlUI ${XMLUI_SOURCES})
 file(GLOB RESTUI_SOURCES
 	restui/Serializing.cpp
 	restui/JSONDeviceDeserializer.cpp
+	restui/JSONDevicePropertyDeserializer.cpp
 	restui/JSONGatewayDeserializer.cpp
 	restui/JSONLocationDeserializer.cpp
 	restui/JSONRoleInGatewayDeserializer.cpp
 	restui/ControlRestHandler.cpp
 	restui/DeviceRestHandler.cpp
+	restui/DevicePropertiesRestHandler.cpp
 	restui/FCMTokenRestHandler.cpp
 	restui/LocationRestHandler.cpp
 	restui/OAuth2CallbackRestHandler.cpp

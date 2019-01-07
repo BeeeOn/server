@@ -5,6 +5,7 @@
 
 #include "provider/TypeInfoProvider.h"
 #include "l10n/TimeZone.h"
+#include "model/DeviceProperty.h"
 #include "model/Control.h"
 #include "model/SubtypeInfo.h"
 #include "model/TypeInfo.h"
@@ -15,6 +16,7 @@ namespace JSON {
 class PrintHandler;
 
 }
+
 }
 
 namespace BeeeOn {
@@ -68,6 +70,19 @@ void serialize(Poco::JSON::PrintHandler  &output, const std::vector <RoleInGatew
 void serialize(Poco::JSON::PrintHandler &output, const Device &device);
 void serialize(Poco::JSON::PrintHandler &output,
 	       const std::vector<Device> &devices);
+
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const DecryptedDeviceProperty &property);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::vector<DecryptedDeviceProperty> &properties);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const DevicePropertyKey &key);
+void serialize(Poco::JSON::PrintHandler &output,
+		Translator &translator,
+		const std::vector<DevicePropertyKey> &keys);
 
 void serialize(Poco::JSON::PrintHandler &output,
 		Translator &translator,

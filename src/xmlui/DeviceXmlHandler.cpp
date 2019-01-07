@@ -22,7 +22,7 @@ DeviceXmlHandler::DeviceXmlHandler(const StreamSocket &socket,
 		const AutoPtr<Document> input,
 		Session::Ptr session,
 		DeviceService &deviceService,
-		CryptoConfig *config):
+		SharedPtr<CryptoConfig> config):
 	SessionXmlHandler("devices", socket, input, session),
 	m_deviceService(deviceService),
 	m_config(config)

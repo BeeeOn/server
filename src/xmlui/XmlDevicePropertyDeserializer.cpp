@@ -14,7 +14,7 @@ using namespace Poco::XML;
 using namespace BeeeOn;
 
 XmlDevicePropertyDeserializer::XmlDevicePropertyDeserializer(
-		const Element &node, const CryptoConfig *config):
+		const Element &node, const SharedPtr<CryptoConfig> config):
 	m_node(node),
 	m_config(config)
 {

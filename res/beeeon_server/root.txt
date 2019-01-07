@@ -7,6 +7,8 @@ root {
 	malformed_input_data { "could not process input data" }
 	invalid_input_data { "invalid input data" }
 	in_progress { "operation in progress" }
+	already_exists { "entity already exists" }
+	entity_not_writable { "entity is not writable" }
 
 	auth {
 		providers {
@@ -326,6 +328,14 @@ root {
 					" please check the Internet connection of your BeeeOn Gateway."
 				}
 			}
+		}
+	}
+
+	device {
+		property {
+			ip-address { "IP address" }
+			password { "Password" }
+			firmware { "Firmware" }
 		}
 	}
 }

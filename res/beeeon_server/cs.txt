@@ -8,6 +8,8 @@ cs {
 	invalid_input_data { "chybně zadané údaje" }
 	internal_error { "interní chyba serveru" }
 	in_progress { "operace už běží" }
+	already_exists { "položka již existuje" }
+	entity_not_writable { "položku nelze vytvářet ani měnit" }
 
 	types {
 		availability {
@@ -315,6 +317,14 @@ cs {
 					" prosím, zkontrolujte Internetové připojení vaší brány, je pravděpodobně nestabilní."
 				}
 			}
+		}
+	}
+
+	device {
+		property {
+			ip-address { "IP adresa" }
+			password { "Heslo" }
+			firmware { "Firmware" }
 		}
 	}
 }
