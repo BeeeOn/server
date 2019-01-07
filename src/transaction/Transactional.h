@@ -17,7 +17,7 @@ namespace BeeeOn {
 #define BEEEON_TRANSACTION_RETURN_ON(transactional, type, code) \
 	(transactional).transaction<type>([&]() {return code;})
 
-class Transactional : public Loggable {
+class Transactional : public virtual Loggable {
 public:
 	Transactional();
 
