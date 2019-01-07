@@ -44,5 +44,12 @@
 			<set name="console" ref="stdConsole" />
 			<set name="deviceInfoProvider" ref="deviceInfoProvider" />
 		</instance>
+
+		<instance name="devicePropertyTool" class="BeeeOn::DevicePropertyTool">
+			<set name="devicePropertyDao" ref="devicePropertyDao" />
+			<set name="transactionManager" ref="transactionManager" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
+			<set name="console" ref="stdConsole" />
+		</instance>
 	</factory>
 </system>

@@ -221,8 +221,8 @@ VALUES
 	beeeon.to_device_id(11758097814818974973),
 	1284174504043136,
 	2, -- password
-	'qmdPau6zKHxkTqnU3f7po/RiLNFTECFiA5BE7ICQZ8U=',
-	'{"it": 2000, "name": "aes256", "salt": ",wXuaWo813cOsPHLV9likt3gh6V8HDG^"}'
+	'juq4DwIszgPfDEyxgYD1Dw==',
+	'{"it": 2000, "name": "aes256", "salt": "TZiHg-eVd7FL8As2npxkSH%4V4i2WJfr"}'
 );
 
 ---
