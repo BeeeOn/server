@@ -56,7 +56,7 @@ class TestNewDevice(unittest.TestCase):
 					]
 				}
 			],
-			"ip-address" : "10.0.0.1",
+			"ip_address" : "10.0.0.1",
 			"firmware": "v1.0"
 		})
 
