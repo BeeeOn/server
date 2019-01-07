@@ -1,5 +1,6 @@
 #pragma once
 
+#include <Poco/SharedPtr.h>
 #include <Poco/DOM/Element.h>
 
 #include "service/Deserializer.h"
@@ -10,7 +11,7 @@ namespace BeeeOn {
 class XmlDevicePropertyDeserializer : public Deserializer<DeviceProperty> {
 public:
 	XmlDevicePropertyDeserializer(const Poco::XML::Element &node,
-				const CryptoConfig *config);
+				const Poco::SharedPtr<CryptoConfig> config);
 
 	void partial(DeviceProperty &property) const override;
 	void full(DeviceProperty &property) const override;
@@ -21,7 +22,7 @@ protected:
 
 private:
 	const Poco::XML::Element &m_node;
-	const CryptoConfig *m_config;
+	const Poco::SharedPtr<CryptoConfig> m_config;
 };
 
 }
