@@ -420,6 +420,10 @@ bool DeviceServiceImpl::doCreateProperty(RelationWithData<DeviceProperty, Device
 
 	input.data().full(input.target());
 
+	DeviceProperty duplicate(input.target());
+	if (m_propertyDao->fetch(duplicate, input.base()))
+		return false; // would not be inserted
+
 	return m_propertyDao->insert(input.target(), input.base());
 }
 
