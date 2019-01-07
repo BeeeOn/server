@@ -194,6 +194,7 @@ file(GLOB SOURCES
 	${PROJECT_SOURCE_DIR}/util/BitmapsSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/DevicesSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/DeviceMatchingTester.cpp
+	${PROJECT_SOURCE_DIR}/util/DevicePropertyTool.cpp
 	${PROJECT_SOURCE_DIR}/util/EnumsSAXHandler.cpp
 	${PROJECT_SOURCE_DIR}/util/HTTPClient.cpp
 	${PROJECT_SOURCE_DIR}/util/PocoStatementIntruder.cpp
