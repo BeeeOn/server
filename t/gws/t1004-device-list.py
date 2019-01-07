@@ -52,6 +52,7 @@ class TestDeviceList(unittest.TestCase):
 		)
 
 		self.ws.send(msg)
+		self.ws.settimeout(5) # this can take more time, suboptimal implementation
 		msg = json.loads(self.ws.recv())
 
 		self.assertEqual("device_list_response", msg["message_type"])
@@ -76,6 +77,10 @@ class TestDeviceList(unittest.TestCase):
 		self.assertEqual(19.5, msg["values"]["0xa335d00019f5234e"]["0"])
 		self.assertEqual(0, msg["values"]["0xa335d00019f5234e"]["1"])
 		# 0xa335d00019f5234e[2] is a random value and cannot be easily tested
+
+		self.assertEqual("10.0.0.1", msg["config"]["0xa32d27aa5e94ecfd"]["ip-address"])
+		self.assertEqual("super-secret", msg["config"]["0xa32d27aa5e94ecfd"]["password"])
+		self.assertEqual("v1.0-6453", msg["config"]["0xa335d00019f5234e"]["firmware"])
 
 		assureNotClosed(self, self.ws)
 

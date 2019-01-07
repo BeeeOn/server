@@ -9,12 +9,13 @@
 #include "dao/SensorHistoryDao.h"
 #include "gws/DeviceListener.h"
 #include "policy/DeviceAccessPolicy.h"
-#include "model/DeviceWithData.h"
+#include "model/DeviceExtended.h"
 #include "provider/DeviceInfoProvider.h"
 #include "rpc/GatewayRPC.h"
 #include "service/DeviceService.h"
 #include "service/GWSDeviceService.h"
 #include "transaction/Transactional.h"
+#include "util/CryptoConfig.h"
 #include "util/EventSource.h"
 #include "util/UnknownEvaluator.h"
 
@@ -36,6 +37,7 @@ public:
 	void setDeviceInfoProvider(DeviceInfoProvider::Ptr provider);
 	void setGatewayRPC(GatewayRPC::Ptr rpc);
 	void setAccessPolicy(DeviceAccessPolicy::Ptr policy);
+	void setCryptoConfig(Poco::SharedPtr<CryptoConfig> config);
 	void setEventsExecutor(AsyncExecutor::Ptr executor);
 	void registerListener(DeviceListener::Ptr listener);
 
@@ -150,7 +152,7 @@ public:
 			doRegisterDeviceGroup(descriptions, gateway));
 	}
 
-	void fetchActiveWithPrefix(std::vector<DeviceWithData> &devices,
+	void fetchActiveWithPrefix(std::vector<DeviceExtended> &devices,
 			const Gateway &gateway,
 			const DevicePrefix &prefix) override
 	{
@@ -159,6 +161,7 @@ public:
 
 protected:
 	void valuesFor(DeviceWithData &device);
+	void propertiesFor(DeviceExtended &device);
 
 	bool doFetch(Relation<Device, Gateway> &input);
 	void doFetchMany(Single<std::list<Device>> &input);
@@ -197,11 +200,15 @@ protected:
 			const std::vector<DeviceDescription> &descriptions,
 			const Gateway &gateway);
 
-	void doFetchActiveWithPrefix(std::vector<DeviceWithData> &devices,
+	void doFetchActiveWithPrefix(std::vector<DeviceExtended> &devices,
 			const Gateway &gateway,
 			const DevicePrefix &prefix);
 
 private:
+	void syncDeviceProperties(
+			Device &device,
+			const DeviceDescription &description);
+
 	Poco::SharedPtr<DeviceInfo> verifyDescription(
 			const DeviceDescription &description) const;
 
@@ -224,6 +231,7 @@ private:
 	DeviceInfoProvider::Ptr m_deviceInfoProvider;
 	GatewayRPC::Ptr m_gatewayRPC;
 	DeviceAccessPolicy::Ptr m_policy;
+	Poco::SharedPtr<CryptoConfig> m_cryptoConfig;
 	Poco::SharedPtr<EventSource<DeviceListener>> m_eventSource;
 	UnknownEvaluator m_unknownEvaluator;
 };

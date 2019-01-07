@@ -1,3 +1,5 @@
+#include <list>
+
 #include <Poco/Logger.h>
 #include <Poco/JSON/Array.h>
 
@@ -19,6 +21,7 @@ BEEEON_OBJECT_PROPERTY("rpcForwarder", &GWMessageHandlerImpl::setRPCForwarder)
 BEEEON_OBJECT_PROPERTY("deviceService", &GWMessageHandlerImpl::setDeviceService)
 BEEEON_OBJECT_PROPERTY("gatewayService", &GWMessageHandlerImpl::setGatewayService)
 BEEEON_OBJECT_PROPERTY("sensorHistoryService", &GWMessageHandlerImpl::setSensorHistoryService)
+BEEEON_OBJECT_PROPERTY("cryptoConfig", &GWMessageHandlerImpl::setCryptoConfig)
 BEEEON_OBJECT_PROPERTY("eventsExecutor", &GWMessageHandlerImpl::setEventsExecutor)
 BEEEON_OBJECT_PROPERTY("dataListeners", &GWMessageHandlerImpl::registerDataListener)
 BEEEON_OBJECT_PROPERTY("deviceListeners", &GWMessageHandlerImpl::registerDeviceListener)
@@ -250,7 +253,7 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 	);
 
 	DevicePrefix prefix(request->devicePrefix());
-	vector<DeviceWithData> devices;
+	vector<DeviceExtended> devices;
 
 	try {
 		m_deviceService->fetchActiveWithPrefix(devices, gatewayID, prefix);
@@ -275,6 +278,34 @@ GWResponse::Ptr GWMessageHandlerImpl::handleDeviceList(
 
 			response->setModulesValues(device.id(), values);
 			response->setRefreshFor(device.id(), device.refresh());
+
+			if (m_cryptoConfig.isNull())
+				continue;
+
+			map<string, string> properties;
+
+			for (const auto &property : device.properties()) {
+				if (!property.key().isGatewayReadable())
+					continue;
+
+				if (logger().debug()) {
+					logger().debug(
+						property.key().toString() + ": '"
+							+ property.value() + "' '"
+							+ property.params().toString() + "'",
+						__FILE__, __LINE__);
+				}
+
+				try {
+					DecryptedDeviceProperty decrypted(property, m_cryptoConfig);
+					properties.emplace(
+						decrypted.key().toString(),
+						decrypted.asString());
+				}
+				BEEEON_CATCH_CHAIN(logger())
+			}
+
+			response->setProperties(device.id(), properties);
 		}
 
 		response->setStatus(GWResponse::Status::SUCCESS);
@@ -398,6 +429,11 @@ void GWMessageHandlerImpl::setSensorHistoryService(
 		GWSSensorHistoryService::Ptr service)
 {
 	m_sensorHistoryService = service;
+}
+
+void GWMessageHandlerImpl::setCryptoConfig(SharedPtr<CryptoConfig> config)
+{
+	m_cryptoConfig = config;
 }
 
 void GWMessageHandlerImpl::registerDataListener(SensorDataListener::Ptr listener)

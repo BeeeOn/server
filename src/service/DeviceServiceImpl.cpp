@@ -1,3 +1,5 @@
+#include <set>
+
 #include <Poco/Exception.h>
 #include <Poco/Logger.h>
 #include <Poco/Nullable.h>
@@ -23,6 +25,7 @@ BEEEON_OBJECT_PROPERTY("deviceInfoProvider", &DeviceServiceImpl::setDeviceInfoPr
 BEEEON_OBJECT_PROPERTY("gatewayRPC", &DeviceServiceImpl::setGatewayRPC)
 BEEEON_OBJECT_PROPERTY("accessPolicy", &DeviceServiceImpl::setAccessPolicy)
 BEEEON_OBJECT_PROPERTY("transactionManager", &DeviceServiceImpl::setTransactionManager)
+BEEEON_OBJECT_PROPERTY("cryptoConfig", &DeviceServiceImpl::setCryptoConfig)
 BEEEON_OBJECT_PROPERTY("listeners", &DeviceServiceImpl::registerListener)
 BEEEON_OBJECT_HOOK("done", &DeviceServiceImpl::removeUnusedDevices)
 BEEEON_OBJECT_END(BeeeOn, DeviceServiceImpl)
@@ -64,6 +67,11 @@ void DeviceServiceImpl::setGatewayRPC(GatewayRPC::Ptr rpc)
 void DeviceServiceImpl::setAccessPolicy(DeviceAccessPolicy::Ptr policy)
 {
 	m_policy = policy;
+}
+
+void DeviceServiceImpl::setCryptoConfig(SharedPtr<CryptoConfig> config)
+{
+	m_cryptoConfig = config;
 }
 
 void DeviceServiceImpl::setEventsExecutor(AsyncExecutor::Ptr executor)
@@ -542,11 +550,105 @@ bool DeviceServiceImpl::doRegisterDevice(Device &device,
 		const Gateway &gateway)
 {
 	if (m_deviceDao->fetch(device, gateway)) {
-		return doRegisterUpdate(device, description);
+		 if (!doRegisterUpdate(device, description))
+			 return false;
 	}
 	else {
 		device.setGateway(gateway);
-		return doRegisterFirst(device, description);
+		if (!doRegisterFirst(device, description))
+			return false;
+	}
+
+	if (m_cryptoConfig.isNull())
+		return true;
+
+	syncDeviceProperties(device, description);
+	return true;
+}
+
+static Nullable<string> extractValue(
+		const DevicePropertyKey &key,
+		const DeviceDescription &description)
+{
+	switch (key) {
+	case DevicePropertyKey::KEY_IP_ADDRESS:
+		if (description.ipAddress().isNull())
+			return {};
+
+		return description.ipAddress().value().toString();
+
+	case DevicePropertyKey::KEY_FIRMWARE:
+		if (description.firmware().empty())
+			return {};
+
+		return description.firmware();
+
+	default:
+		return {};
+	}
+}
+
+void DeviceServiceImpl::syncDeviceProperties(
+		Device &device,
+		const DeviceDescription &description)
+{
+	list<DeviceProperty> properties;
+	m_propertyDao->fetchByDevice(properties, device);
+	set<DevicePropertyKey> processedKeys;
+
+	for (auto &property : properties) {
+		if (!property.key().isGatewayWritable())
+			continue;
+
+		processedKeys.emplace(property.key());
+		const auto input = extractValue(property.key(), description);
+
+		if (input.isNull())
+			continue;
+
+		property.setFromString(input.value(), *m_cryptoConfig);
+
+		try {
+			if (!m_propertyDao->update(property, device)) {
+				logger().warning(
+					"failed to update property "
+					+ property.key().toString()
+					+ " to " + description.firmware()
+					+ " (race condition?)",
+					__FILE__, __LINE__);
+			}
+		}
+		BEEEON_CATCH_CHAIN(logger())
+	}
+
+	for (const auto &key : DevicePropertyKey::all()) {
+		if (!key.isGatewayWritable())
+			continue;
+
+		if (processedKeys.find(key) != end(processedKeys))
+			continue;
+
+		DeviceProperty property;
+		const auto input = extractValue(key, description);
+
+		if (input.isNull())
+			continue;
+
+		property.setKey(key);
+		property.setParams(key.deriveParams(*m_cryptoConfig));
+		property.setFromString(input.value(), *m_cryptoConfig);
+
+		try {
+			if (!m_propertyDao->insert(property, device)) {
+				logger().warning(
+					"failed to insert property "
+					+ property.key().toString()
+					+ " to " + description.firmware()
+					+ " (race condition?)",
+					__FILE__, __LINE__);
+			}
+		}
+		BEEEON_CATCH_CHAIN(logger())
 	}
 }
 
@@ -565,7 +667,15 @@ void DeviceServiceImpl::doRegisterDeviceGroup(
 	}
 }
 
-void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
+void DeviceServiceImpl::propertiesFor(DeviceExtended &device)
+{
+	list<DeviceProperty> properties;
+
+	m_propertyDao->fetchByDevice(properties, device);
+	device.setProperties(properties);
+}
+
+void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceExtended> &devices,
 		const Gateway &gateway,
 		const DevicePrefix &prefix)
 {
@@ -573,10 +683,11 @@ void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
 	m_deviceDao->fetchActiveWithPrefix(simple, gateway, prefix);
 
 	for (const auto &one : simple) {
-		DeviceWithData device = one;
+		DeviceExtended device = one;
 
 		try {
 			valuesFor(device);
+			propertiesFor(device);
 
 			SharedPtr<DeviceInfo> info = device.type();
 			if (info.isNull())
