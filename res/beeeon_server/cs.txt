@@ -325,6 +325,8 @@ cs {
 			ip-address { "IP adresa" }
 			password { "Heslo" }
 			firmware { "Firmware" }
+			mac-address { "MAC adresa" }
+			serial { "Seriové číslo" }
 		}
 	}
 }

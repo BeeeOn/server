@@ -56,7 +56,8 @@ class TestNewDevice(unittest.TestCase):
 					]
 				}
 			],
-			"ip-address" : "10.0.0.1",
+			"ip_address" : "10.0.0.1",
+			"mac_address": "00:11:22:33:44:55",
 			"firmware": "v1.0"
 		})
 
@@ -241,7 +242,8 @@ class TestNewDevice(unittest.TestCase):
 					"type" : "availability",
 					"attributes" : []
 				}
-			]
+			],
+			"serial_number": "122342341231"
 		})
 
 		self.ws.send(msg1)
@@ -273,7 +275,8 @@ class TestNewDevice(unittest.TestCase):
 					"type" : "availability",
 					"attributes" : []
 				}
-			]
+			],
+			"serial_number": "122342341231"
 		})
 
 		self.ws.send(msg2)

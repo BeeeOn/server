@@ -247,6 +247,30 @@ class TestDevicesProperties(unittest.TestCase):
 
 		self.assertEqual(204, response.status)
 
+	def test9_create_properties(self):
+		properties = {
+			"ip-address": "10.0.0.1",
+			"password": "test-password"
+		}
+
+		for key, value in properties.items():
+			req = POST(config.ui_host, config.ui_port,
+				"/gateways/" + config.gateway_id
+				+ "/devices/0xa371959aad24618e/properties/" + key)
+			req.authorize(self.session)
+			req.body(json.dumps({"value": "10.0.0.1"}))
+			response, content = req()
+
+			self.assertEqual(200, response.status)
+
+			req = DELETE(config.ui_host, config.ui_port,
+				"/gateways/" + config.gateway_id
+				+ "/devices/0xa371959aad24618e/properties/" + key)
+			req.authorize(self.session)
+			response, content = req()
+
+			self.assertEqual(204, response.status)
+
 if __name__ == '__main__':
 	import sys
 	import taprunner

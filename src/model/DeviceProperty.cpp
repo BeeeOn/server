@@ -1,4 +1,5 @@
 #include <Poco/Exception.h>
+#include <Poco/NumberParser.h>
 #include <Poco/Crypto/CipherFactory.h>
 #include <Poco/Crypto/CipherKey.h>
 
@@ -18,6 +19,8 @@ EnumHelper<DevicePropertyKey::Raw>::ValueMap &DevicePropertyKeyEnum::valueMap()
 		{DevicePropertyKey::KEY_IP_ADDRESS, "ip-address"},
 		{DevicePropertyKey::KEY_PASSWORD, "password"},
 		{DevicePropertyKey::KEY_FIRMWARE, "firmware"},
+		{DevicePropertyKey::KEY_MAC_ADDRESS, "mac-address"},
+		{DevicePropertyKey::KEY_SERIAL_NUMBER, "serial"},
 	};
 
 	return valueMap;
@@ -31,6 +34,10 @@ bool DevicePropertyKeyEnum::isUserWritable() const
 	case KEY_PASSWORD:
 		return true;
 	case KEY_FIRMWARE:
+		return false;
+	case KEY_MAC_ADDRESS:
+		return false;
+	case KEY_SERIAL_NUMBER:
 		return false;
 	case KEY_INVALID:
 		break;
@@ -48,6 +55,10 @@ bool DevicePropertyKeyEnum::isUserReadable() const
 		return false;
 	case KEY_FIRMWARE:
 		return true;
+	case KEY_MAC_ADDRESS:
+		return true;
+	case KEY_SERIAL_NUMBER:
+		return true;
 	case KEY_INVALID:
 		break;
 	}
@@ -64,6 +75,10 @@ bool DevicePropertyKeyEnum::isGatewayWritable() const
 		return false;
 	case KEY_FIRMWARE:
 		return true;
+	case KEY_MAC_ADDRESS:
+		return true;
+	case KEY_SERIAL_NUMBER:
+		return true;
 	case KEY_INVALID:
 		break;
 	}
@@ -79,6 +94,10 @@ bool DevicePropertyKeyEnum::isGatewayReadable() const
 	case KEY_PASSWORD:
 		return true;
 	case KEY_FIRMWARE:
+		return true;
+	case KEY_MAC_ADDRESS:
+		return true;
+	case KEY_SERIAL_NUMBER:
 		return true;
 	case KEY_INVALID:
 		break;
@@ -97,6 +116,10 @@ CryptoParams DevicePropertyKeyEnum::deriveParams(const CryptoConfig &config) con
 		return config.deriveParams();
 	case KEY_FIRMWARE:
 		return CryptoParams::createEmpty();
+	case KEY_MAC_ADDRESS:
+		return config.deriveParams();
+	case KEY_SERIAL_NUMBER:
+		return config.deriveParams();
 	case KEY_INVALID:
 		return CryptoParams::createEmpty();
 	}
@@ -188,6 +211,44 @@ string DeviceProperty::asFirmware() const
 	return m_value;
 }
 
+void DeviceProperty::setMACAddress(const MACAddress &address, AutoPtr<Cipher> cipher)
+{
+	if (m_key != DevicePropertyKey::KEY_MAC_ADDRESS)
+		throw IllegalStateException("cannot set MAC address for key " + m_key);
+
+	if (m_params.empty())
+		throw IllegalStateException("crypto params is empty for MAC address");
+
+	m_value = cipher->encryptString(address.toString(), Cipher::ENC_BASE64);
+}
+
+MACAddress DeviceProperty::asMACAddress(AutoPtr<Cipher> cipher) const
+{
+	if (m_key != DevicePropertyKey::KEY_MAC_ADDRESS)
+		throw IllegalStateException("cannot read MAC address with key " + m_key);
+
+	return MACAddress::parse(cipher->decryptString(m_value, Cipher::ENC_BASE64));
+}
+
+void DeviceProperty::setSerial(const uint64_t serial, AutoPtr<Cipher> cipher)
+{
+	if (m_key != DevicePropertyKey::KEY_SERIAL_NUMBER)
+		throw IllegalStateException("cannot set serial number for key " + m_key);
+
+	if (m_params.empty())
+		throw IllegalStateException("crypto params is empty for serial number");
+
+	m_value = cipher->encryptString(to_string(serial), Cipher::ENC_BASE64);
+}
+
+uint64_t DeviceProperty::asSerial(AutoPtr<Cipher> cipher) const
+{
+	if (m_key != DevicePropertyKey::KEY_SERIAL_NUMBER)
+		throw IllegalStateException("cannot read serial number with key " + m_key);
+
+	return NumberParser::parseUnsigned64(cipher->decryptString(m_value, Cipher::ENC_BASE64));
+}
+
 void DeviceProperty::setFromString(
 		const string &input,
 		const CryptoConfig &config)
@@ -210,6 +271,16 @@ void DeviceProperty::setFromString(
 		setFirmware(input);
 		break;
 
+	case DevicePropertyKey::KEY_MAC_ADDRESS:
+		cipher = factory.createCipher(config.createKey(params()));
+		setMACAddress(MACAddress::parse(input), cipher);
+		break;
+
+	case DevicePropertyKey::KEY_SERIAL_NUMBER:
+		cipher = factory.createCipher(config.createKey(params()));
+		setSerial(NumberParser::parseUnsigned64(input), cipher);
+		break;
+
 	case DevicePropertyKey::KEY_INVALID:
 		throw InvalidArgumentException(
 			"device property '" + key().toString() + "' cannot be parsed");
@@ -226,6 +297,10 @@ string DeviceProperty::asString(AutoPtr<Cipher> cipher) const
 		return asPassword(cipher);
 	case DevicePropertyKey::KEY_FIRMWARE:
 		return asFirmware();
+	case DevicePropertyKey::KEY_MAC_ADDRESS:
+		return asMACAddress(cipher).toString(':');
+	case DevicePropertyKey::KEY_SERIAL_NUMBER:
+		return to_string(asSerial(cipher));
 	case DevicePropertyKey::KEY_INVALID:
 		break;
 	}
@@ -253,6 +328,8 @@ DecryptedDeviceProperty::DecryptedDeviceProperty(
 	switch (property.key().raw()) {
 	case DevicePropertyKey::KEY_IP_ADDRESS:
 	case DevicePropertyKey::KEY_PASSWORD:
+	case DevicePropertyKey::KEY_MAC_ADDRESS:
+	case DevicePropertyKey::KEY_SERIAL_NUMBER:
 		if (config == NULL)
 			throw IllegalStateException("no crypto configuration provided");
 
@@ -281,6 +358,16 @@ string DecryptedDeviceProperty::asPassword() const
 string DecryptedDeviceProperty::asFirmware() const
 {
 	return m_property.asFirmware();
+}
+
+MACAddress DecryptedDeviceProperty::asMACAddress() const
+{
+	return m_property.asMACAddress(m_cipher);
+}
+
+uint64_t DecryptedDeviceProperty::asSerial() const
+{
+	return m_property.asSerial(m_cipher);
 }
 
 string DecryptedDeviceProperty::asString() const
