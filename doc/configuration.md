@@ -104,6 +104,7 @@ The INI file is divided into logcal sections:
   * `rate.impl` - rate limiter implementation (slidingWindow, no)
   * `rate.perMinute` - maximal number of incoming messages per minute of slidingWindow rate limiter
   * `rate.perHour` - maximal number of incoming messages per hour of slidingWindow rate limiter
+  * `messages.limit` - limit of user-log messages stored per gateway (circular buffer)
 
 * `spec` - location of certain specification and configuration files:
   * `devices.xml` - path to devices.xml to be used
