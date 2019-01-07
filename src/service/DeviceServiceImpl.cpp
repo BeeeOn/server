@@ -582,8 +582,9 @@ void DeviceServiceImpl::doFetchActiveWithPrefix(vector<DeviceWithData> &devices,
 			if (info.isNull())
 				continue;
 
+			const auto &values = device.values();
 			Zip<const set<ModuleInfo>, const vector<ValueAt>> zip(
-				info->modules(), device.values());
+				info->modules(), values);
 			vector<ValueAt> raw;
 
 			for (const auto &pair : zip) {
