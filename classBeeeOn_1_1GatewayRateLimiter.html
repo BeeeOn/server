@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -63,7 +63,8 @@ Inheritance diagram for BeeeOn::GatewayRateLimiter:</div>
  <div class="center">
   <img src="classBeeeOn_1_1GatewayRateLimiter.png" usemap="#BeeeOn::GatewayRateLimiter_map" alt=""/>
   <map id="BeeeOn::GatewayRateLimiter_map" name="BeeeOn::GatewayRateLimiter_map">
-<area href="classBeeeOn_1_1NoGatewayRateLimiter.html" alt="BeeeOn::NoGatewayRateLimiter" shape="rect" coords="0,56,191,80"/>
+<area href="classBeeeOn_1_1NoGatewayRateLimiter.html" alt="BeeeOn::NoGatewayRateLimiter" shape="rect" coords="0,56,208,80"/>
+<area href="classBeeeOn_1_1SlidingWindowRateLimiter.html" title="SlidingWindowRateLimiter keeps track of a recent amount of messages received from a certain gateway..." alt="BeeeOn::SlidingWindowRateLimiter" shape="rect" coords="218,56,426,80"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -114,6 +115,8 @@ const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;&#16
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>true if the given message is allowed to be processed. Otherwise, it should be discarded. </dd></dl>
 
+<p>Reimplemented in <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiter.html#ae2106c9f4e0fbd795378e10f1123f5ab">BeeeOn::SlidingWindowRateLimiter</a>.</p>
+
 </div>
 </div>
 <a id="a64c46bccce45fbf92c4896e7e8cb9593"></a>
@@ -140,7 +143,7 @@ const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;&#16
 </div><div class="memdoc">
 <dl class="section return"><dt>Returns</dt><dd>true if the incoming message is allowed to be processed. In this case, we consider any message without knowing its contents. We can thus limit also non-application messages. </dd></dl>
 
-<p>Implemented in <a class="el" href="classBeeeOn_1_1NoGatewayRateLimiter.html#ad71301f9f3f0f6f8f9c824c47b3e0baf">BeeeOn::NoGatewayRateLimiter</a>.</p>
+<p>Implemented in <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiter.html#a799611397d86bbe21e4a7c227e901fa3">BeeeOn::SlidingWindowRateLimiter</a>, and <a class="el" href="classBeeeOn_1_1NoGatewayRateLimiter.html#ad71301f9f3f0f6f8f9c824c47b3e0baf">BeeeOn::NoGatewayRateLimiter</a>.</p>
 
 </div>
 </div>

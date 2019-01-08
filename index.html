@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -55,10 +55,10 @@ $(function() {
 <h2>Prerequisites</h2>
 <p>Required prerequisites for development:</p>
 <ul>
-<li>Poco library 1.7.7+ devel</li>
+<li>Poco library 1.7.7+ devel (recommended Poco 1.9)</li>
 <li>icu and libicu-devel</li>
 <li>cppunit-devel</li>
-<li>postgresql-server (9.5+)</li>
+<li>postgresql-server (9.5+, recommended 10+)</li>
 <li>python3<ul>
 <li>testing.postgresql</li>
 <li>http.client</li>
@@ -86,9 +86,9 @@ $(function() {
 </ul>
 <p>Required prerequisites for deployment:</p>
 <ul>
-<li>Poco library 1.7.7+</li>
+<li>Poco library 1.7.7+ (recommended Poco 1.9)</li>
 <li>icu and libicu</li>
-<li>postgresql-server (9.5+)</li>
+<li>postgresql-server (9.5+, recommended 10+)</li>
 <li>postgresql</li>
 <li>sqitch</li>
 </ul>
@@ -101,9 +101,9 @@ $(function() {
 <h2>Start hacking</h2>
 <p>The BeeeOn Gateway is built by the CMake build system:</p>
 <div class="fragment"><div class="line">$ mkdir build</div><div class="line">$ (cd build &amp;&amp; cmake ..)</div><div class="line">$ make -C build</div></div><!-- fragment --><p>During development and for testing, the BeeeOn Server can be started as:</p>
-<div class="fragment"><div class="line">$ tools/server-testing-start.sh</div></div><!-- fragment --><p>This starts a private instance of the PostgreSQL server and then it starts the server that sets the database up.</p>
-<p>There are multiple startup configurations according to the purpose of testing or debugging. The server is started either with the REST-UI or with the XML-UI:</p>
-<div class="fragment"><div class="line">$ TARGET=xmlui tools/server-testing-start.sh</div><div class="line">$ TARGET=restui tools/server-testing-start.sh</div></div><!-- fragment --><p>The executable <code>beeeon-server</code> reads a startup configuration file and configuration files from conf/config.d. Then, the definition of the <em>main</em> instance (of class LoopRunner) is searched, created and executed. All main application threads start via this main instance.</p>
+<div class="fragment"><div class="line">$ beeeon-server -c conf/testing-startup.ini</div></div><!-- fragment --><p>This starts a private instance of the PostgreSQL server and then it starts the server that sets the database up.</p>
+<p>There are multiple startup configurations according to the purpose of testing or debugging. Please note, that in this mode the frontend and GWS are disconnected to enable running of automatic frontend tests (during tests, there is no live gateway and thus the communication with GWS is emulated). This can be easily changed by giving <code>-Dgateway-rpc.impl=async</code> on command line or by editing <code>conf/testing-startup.ini</code>.</p>
+<p>The executable <code>beeeon-server</code> reads a startup configuration file and configuration files from <code>conf/config.d</code>. Then, the definition of the <em>all</em> instance (of class LoopRunner) is searched, created and executed. All main application threads start via this all instance.</p>
 <h2>Integration tests</h2>
 <p>The directory <code>t/</code> contains a set of integration tests. Tests are divided by the public server APIs. Thus, the XML-UI, REST-UI and GWS are tested independently on each other. All tests are written in Python. See <code>t/README</code> for details. </p>
 </div></div><!-- contents -->

@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -74,14 +74,14 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setSubtypeInfoProvide
 <tr class="memitem:a3d9e6f055e46ceee26a190d3ffafee2b"><td class="memItemLeft" align="right" valign="top"><a id="a3d9e6f055e46ceee26a190d3ffafee2b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTranslatorFactory</b> (TranslatorFactory::Ptr factory)</td></tr>
 <tr class="separator:a3d9e6f055e46ceee26a190d3ffafee2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:afcd56fd693857dd3383e9a45b86243e1"><td class="memItemLeft" align="right" valign="top"><a id="afcd56fd693857dd3383e9a45b86243e1"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>list</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:afcd56fd693857dd3383e9a45b86243e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1TypeRestHandler.html#afcd56fd693857dd3383e9a45b86243e1">list</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:afcd56fd693857dd3383e9a45b86243e1"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all data types that can be used by sensoric devices.  <a href="#afcd56fd693857dd3383e9a45b86243e1">More...</a><br /></td></tr>
 <tr class="separator:afcd56fd693857dd3383e9a45b86243e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a39062238b0b7093cb436b9ecfc147b99"><td class="memItemLeft" align="right" valign="top"><a id="a39062238b0b7093cb436b9ecfc147b99"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detail</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a39062238b0b7093cb436b9ecfc147b99"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1TypeRestHandler.html#a39062238b0b7093cb436b9ecfc147b99">detail</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a39062238b0b7093cb436b9ecfc147b99"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show detail of a sensoric type identified by its unique ID.  <a href="#a39062238b0b7093cb436b9ecfc147b99">More...</a><br /></td></tr>
 <tr class="separator:a39062238b0b7093cb436b9ecfc147b99"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6915ad9d6975d026c983ab340d718269"><td class="memItemLeft" align="right" valign="top"><a id="a6915ad9d6975d026c983ab340d718269"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detailSubtype</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a6915ad9d6975d026c983ab340d718269"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1TypeRestHandler.html#a6915ad9d6975d026c983ab340d718269">detailSubtype</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a6915ad9d6975d026c983ab340d718269"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show detail a subtype that specifies more details of its type.  <a href="#a6915ad9d6975d026c983ab340d718269">More...</a><br /></td></tr>
 <tr class="separator:a6915ad9d6975d026c983ab340d718269"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -172,6 +172,153 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setupLogger</b> (Poco
 Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>logger</b> () const</td></tr>
 <tr class="separator:a689ac76b94112bc55f9f528fc54a7d40 inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a39062238b0b7093cb436b9ecfc147b99"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a39062238b0b7093cb436b9ecfc147b99">&#9670;&nbsp;</a></span>detail()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TypeRestHandler::detail </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show detail of a sensoric type identified by its unique ID. </p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example output (data): <pre>
+{
+  "id": "fire",
+  "name": "fire",
+  "values": {
+    "0": "no fire",
+    "1": "fire detected"
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="a6915ad9d6975d026c983ab340d718269"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6915ad9d6975d026c983ab340d718269">&#9670;&nbsp;</a></span>detailSubtype()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TypeRestHandler::detailSubtype </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show detail a subtype that specifies more details of its type. </p>
+<p>A subtype extends definitions of types <code>enum</code> and <code>bitmap</code>. In this way, it is possible to express and understand vendor-specific data of certain sensors.</p>
+<p>Subtypes of enum define fields <em>id</em>, <em>name</em> and <em>values</em>. The <em>values</em> entry lists the particular enum values and their mappings to the values as could be get by requesting a sensor history.</p>
+<p>Subtypes of bitmap define fields <em>id</em>, <em>name</em>, <em>flags</em> and <em>groups</em>. Only one or both of <em>flags</em> and <em>groups</em> can be present. The <em>flags</em> structure specifies mapping of certain bits to their semantics. The <em>groups</em> array specifies mapping of certain bits into groups that make sense only all together (e.g. scattered error bits).</p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example enum output (data): <pre>
+{
+  "id": "MOD_BOILER_STATUS",
+  "name": "boiler status",
+  "values": {
+    "0": "undefined",
+    "1": "heating",
+    "2": "hot water",
+    "3": "failure",
+    "4": "shutdown",
+  }
+}
+</pre></li>
+<li>example bitmap flags output: <pre>
+{
+  "id": "MOD_CURRENT_BOILER_OT_FAULT_FLAGS",
+  "name": "OpenTherm fault flags",
+  "flags": {
+    "0": {
+      "name": "service request",
+      "active": "high",
+    },
+    "1": {
+      "name": "lockout reset",
+      "active": "high",
+    },
+    ...
+  }
+}
+</pre></li>
+<li>example bitmap groups output (bits 0, 1, 2, 4, 6, 7 are to be extracted to form a single number - e.g. sensor value 0xca would be transformed into 0x32 to contain only the significant bits): <pre>
+{
+  "id": "MOD_CURRENT_BOILER_OT_OEM_FAULTS",
+  "name": "OpenTherm faults",
+  "groups": [
+    {
+      "mapping": [0, 1, 2, 4, 6, 7],
+      "name": "OEM specific",
+    }
+  ]
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="afcd56fd693857dd3383e9a45b86243e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afcd56fd693857dd3383e9a45b86243e1">&#9670;&nbsp;</a></span>list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TypeRestHandler::list </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>List all data types that can be used by sensoric devices. </p>
+<ul>
+<li>usual responses: 200</li>
+<li>example output (data): <pre>
+[
+  {
+    "id": "temperature",
+    "name": "temperature",
+    "unit": "C",
+  },
+  {
+    "id": "battery",
+    "name": "battery",
+    "unit": "%"
+    "levels": [
+      {
+        "name": "critical",
+        "min": "0",
+        "max": "10",
+        "attention": "single",
+      }
+    ]
+  }
+]
+</pre> </li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/<a class="el" href="TypeRestHandler_8h_source.html">TypeRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/TypeRestHandler.cpp</li>

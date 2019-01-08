@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -95,9 +95,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>fetch</b> (<a class="
 <tr class="memitem:acaad6946f759ad72f3d8eabbdff96e46"><td class="memItemLeft" align="right" valign="top"><a id="acaad6946f759ad72f3d8eabbdff96e46"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>fetchMany</b> (<a class="el" href="classBeeeOn_1_1Relation.html">Relation</a>&lt; std::list&lt; <a class="el" href="classBeeeOn_1_1Control.html">Control</a> &gt;, <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &gt; &amp;data) override</td></tr>
 <tr class="separator:acaad6946f759ad72f3d8eabbdff96e46"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e9abbef8d485c2254cf9729d6e9850f"><td class="memItemLeft" align="right" valign="top"><a id="a8e9abbef8d485c2254cf9729d6e9850f"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>requestChange</b> (<a class="el" href="classBeeeOn_1_1Relation.html">Relation</a>&lt; <a class="el" href="classBeeeOn_1_1Control.html">Control</a>, <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &gt; &amp;data, double value, const Poco::Timespan &amp;timeout) override</td></tr>
-<tr class="separator:a8e9abbef8d485c2254cf9729d6e9850f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa9908e650b37428069f80694d25e8c7a"><td class="memItemLeft" align="right" valign="top"><a id="aa9908e650b37428069f80694d25e8c7a"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>requestChange</b> (<a class="el" href="classBeeeOn_1_1Relation.html">Relation</a>&lt; <a class="el" href="classBeeeOn_1_1Control.html">Control</a>, <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &gt; &amp;data, double value, const Poco::Timespan &amp;timeout, const <a class="el" href="classBeeeOn_1_1Enum.html">OpMode</a> &amp;mode, bool force) override</td></tr>
+<tr class="separator:aa9908e650b37428069f80694d25e8c7a"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abf0771269bb8c955ea4dc82a773dab4b"><td class="memItemLeft" align="right" valign="top"><a id="abf0771269bb8c955ea4dc82a773dab4b"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>fixupControls</b> ()</td></tr>
 <tr class="separator:abf0771269bb8c955ea4dc82a773dab4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -136,9 +136,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>doFetch</b> (<a class
 <tr class="memitem:adb8769a46a9428cfdd198228f37d5e85"><td class="memItemLeft" align="right" valign="top"><a id="adb8769a46a9428cfdd198228f37d5e85"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>doFetchMany</b> (<a class="el" href="classBeeeOn_1_1Relation.html">Relation</a>&lt; std::list&lt; <a class="el" href="classBeeeOn_1_1Control.html">Control</a> &gt;, <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &gt; &amp;data)</td></tr>
 <tr class="separator:adb8769a46a9428cfdd198228f37d5e85"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a798fb281e06182c7376b1f99021ea2a1"><td class="memItemLeft" align="right" valign="top"><a id="a798fb281e06182c7376b1f99021ea2a1"></a>
-ControlChangeHandler::Ptr&#160;</td><td class="memItemRight" valign="bottom"><b>doRequestChange</b> (<a class="el" href="classBeeeOn_1_1Relation.html">Relation</a>&lt; <a class="el" href="classBeeeOn_1_1Control.html">Control</a>, <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &gt; &amp;data, double value, const Poco::Timespan &amp;timeout)</td></tr>
-<tr class="separator:a798fb281e06182c7376b1f99021ea2a1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae040efd14d0257b50d7bbdbddfca1ed5"><td class="memItemLeft" align="right" valign="top"><a id="ae040efd14d0257b50d7bbdbddfca1ed5"></a>
+ControlChangeHandler::Ptr&#160;</td><td class="memItemRight" valign="bottom"><b>doRequestChange</b> (<a class="el" href="classBeeeOn_1_1Relation.html">Relation</a>&lt; <a class="el" href="classBeeeOn_1_1Control.html">Control</a>, <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &gt; &amp;data, double value, const Poco::Timespan &amp;timeout, bool force)</td></tr>
+<tr class="separator:ae040efd14d0257b50d7bbdbddfca1ed5"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a398ff193db4e16e7bbc96bae6dfa0ae8"><td class="memItemLeft" align="right" valign="top"><a id="a398ff193db4e16e7bbc96bae6dfa0ae8"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>startRequest</b> (const <a class="el" href="classBeeeOn_1_1UserPolicyContext.html">UserPolicyContext</a> &amp;policyContext, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device, <a class="el" href="classBeeeOn_1_1Control.html">Control</a> &amp;control, double value)</td></tr>
 <tr class="separator:a398ff193db4e16e7bbc96bae6dfa0ae8"><td class="memSeparator" colspan="2">&#160;</td></tr>

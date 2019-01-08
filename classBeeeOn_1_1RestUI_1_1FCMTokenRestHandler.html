@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -70,14 +70,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a74f4ec9b822e6015dd7245695f4985d5"><td class="memItemLeft" align="right" valign="top"><a id="a74f4ec9b822e6015dd7245695f4985d5"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFCMTokenService</b> (FCMTokenService::Ptr service)</td></tr>
 <tr class="separator:a74f4ec9b822e6015dd7245695f4985d5"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1776b6c0f80624ee8d12e53ec752bc51"><td class="memItemLeft" align="right" valign="top"><a id="a1776b6c0f80624ee8d12e53ec752bc51"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>listServices</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a1776b6c0f80624ee8d12e53ec752bc51"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1FCMTokenRestHandler.html#a1776b6c0f80624ee8d12e53ec752bc51">listServices</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a1776b6c0f80624ee8d12e53ec752bc51"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all available notification services the client can register with.  <a href="#a1776b6c0f80624ee8d12e53ec752bc51">More...</a><br /></td></tr>
 <tr class="separator:a1776b6c0f80624ee8d12e53ec752bc51"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad513da1303bac0afc4ce366a7e7a7e41"><td class="memItemLeft" align="right" valign="top"><a id="ad513da1303bac0afc4ce366a7e7a7e41"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>registerToken</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:ad513da1303bac0afc4ce366a7e7a7e41"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1FCMTokenRestHandler.html#ad513da1303bac0afc4ce366a7e7a7e41">registerToken</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:ad513da1303bac0afc4ce366a7e7a7e41"><td class="mdescLeft">&#160;</td><td class="mdescRight">Register the given token of a notification service that would be used for client notifications.  <a href="#ad513da1303bac0afc4ce366a7e7a7e41">More...</a><br /></td></tr>
 <tr class="separator:ad513da1303bac0afc4ce366a7e7a7e41"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aef87944af36c4ca5bc8b535933638c93"><td class="memItemLeft" align="right" valign="top"><a id="aef87944af36c4ca5bc8b535933638c93"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>unregisterToken</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:aef87944af36c4ca5bc8b535933638c93"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1FCMTokenRestHandler.html#aef87944af36c4ca5bc8b535933638c93">unregisterToken</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:aef87944af36c4ca5bc8b535933638c93"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unregister the given token to stop generating notifications for the associated client.  <a href="#aef87944af36c4ca5bc8b535933638c93">More...</a><br /></td></tr>
 <tr class="separator:aef87944af36c4ca5bc8b535933638c93"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -181,6 +181,94 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>configureSimpl
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</b> (Poco::Logger &amp;logger, const Poco::Message::Priority priority, const Poco::Exception &amp;e, const char *file, size_t line)</td></tr>
 <tr class="separator:ad5ab586b4bd8f9f97552e475a008db44 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1776b6c0f80624ee8d12e53ec752bc51"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1776b6c0f80624ee8d12e53ec752bc51">&#9670;&nbsp;</a></span>listServices()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FCMTokenRestHandler::listServices </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>List all available notification services the client can register with. </p>
+<ul>
+<li>usual responses: 200</li>
+<li>example output (data): <pre>
+[
+  {
+    "name": "fcm",
+    "id": "super-public-fcm-id"
+  }
+]
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="ad513da1303bac0afc4ce366a7e7a7e41"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad513da1303bac0afc4ce366a7e7a7e41">&#9670;&nbsp;</a></span>registerToken()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FCMTokenRestHandler::registerToken </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Register the given token of a notification service that would be used for client notifications. </p>
+<ul>
+<li>usual responses: 204</li>
+<li>example input: <pre>
+{
+  "id": "super-token-from-fcm"
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="aef87944af36c4ca5bc8b535933638c93"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef87944af36c4ca5bc8b535933638c93">&#9670;&nbsp;</a></span>unregisterToken()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void FCMTokenRestHandler::unregisterToken </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unregister the given token to stop generating notifications for the associated client. </p>
+<ul>
+<li>usual responses: 204</li>
+<li>example input: <pre>
+{
+  "id": "super-token-from-fcm"
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/<a class="el" href="FCMTokenRestHandler_8h_source.html">FCMTokenRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/FCMTokenRestHandler.cpp</li>

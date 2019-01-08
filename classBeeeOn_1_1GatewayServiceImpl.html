@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -73,6 +73,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setGatewayDao</b> (Ga
 <tr class="memitem:acc7d5d3a0e33c1545697f6c6078d2ee3"><td class="memItemLeft" align="right" valign="top"><a id="acc7d5d3a0e33c1545697f6c6078d2ee3"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setGatewayStatusDao</b> (GatewayStatusDao::Ptr dao)</td></tr>
 <tr class="separator:acc7d5d3a0e33c1545697f6c6078d2ee3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afeb48f557fc54b07aa3cac0977e55c63"><td class="memItemLeft" align="right" valign="top"><a id="afeb48f557fc54b07aa3cac0977e55c63"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setGatewayMessageDao</b> (GatewayMessageDao::Ptr dao)</td></tr>
+<tr class="separator:afeb48f557fc54b07aa3cac0977e55c63"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a372fac2531c779a386930617d490fb03"><td class="memItemLeft" align="right" valign="top"><a id="a372fac2531c779a386930617d490fb03"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRoleInGatewayDao</b> (RoleInGatewayDao::Ptr dao)</td></tr>
 <tr class="separator:a372fac2531c779a386930617d490fb03"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -88,6 +91,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setScanController</b>
 <tr class="memitem:aa7af24243ceea5d693d1a35553f5d4c6"><td class="memItemLeft" align="right" valign="top"><a id="aa7af24243ceea5d693d1a35553f5d4c6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setAccessPolicy</b> (GatewayAccessPolicy::Ptr policy)</td></tr>
 <tr class="separator:aa7af24243ceea5d693d1a35553f5d4c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbb1dfc7666b6c029d58f055737c1b82"><td class="memItemLeft" align="right" valign="top"><a id="afbb1dfc7666b6c029d58f055737c1b82"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setGatewayMessagesLimit</b> (int limit)</td></tr>
+<tr class="separator:afbb1dfc7666b6c029d58f055737c1b82"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab0083966c980452b0fe59bcc9a668f45"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayServiceImpl.html#ab0083966c980452b0fe59bcc9a668f45">registerGateway</a> (<a class="el" href="classBeeeOn_1_1SingleWithData.html">SingleWithData</a>&lt; <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &gt; &amp;input, const <a class="el" href="classBeeeOn_1_1VerifiedIdentity.html">VerifiedIdentity</a> &amp;verifiedIdentity) override</td></tr>
 <tr class="separator:ab0083966c980452b0fe59bcc9a668f45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aafadecd548f6345733b8e2b6457a824d"><td class="memItemLeft" align="right" valign="top"><a id="aafadecd548f6345733b8e2b6457a824d"></a>
@@ -116,6 +122,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>unregister</b> (<a cl
 <tr class="separator:ac15836ef2586de4629f7bbc73006880d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3f13528b05d947baa8e7861ef7b783d4"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayServiceImpl.html#a3f13528b05d947baa8e7861ef7b783d4">registerGateway</a> (<a class="el" href="classBeeeOn_1_1GatewayStatus.html">GatewayStatus</a> &amp;status, <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway) override</td></tr>
 <tr class="separator:a3f13528b05d947baa8e7861ef7b783d4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac35a442f6112ffe68ea893b2b46af40f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayServiceImpl.html#ac35a442f6112ffe68ea893b2b46af40f">deliverMessage</a> (<a class="el" href="classBeeeOn_1_1GatewayMessage.html">GatewayMessage</a> &amp;message) override</td></tr>
+<tr class="memdesc:ac35a442f6112ffe68ea893b2b46af40f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Deliver message of a gateway.  <a href="#ac35a442f6112ffe68ea893b2b46af40f">More...</a><br /></td></tr>
+<tr class="separator:ac35a442f6112ffe68ea893b2b46af40f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1Transactional"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1Transactional')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1Transactional.html">BeeeOn::Transactional</a></td></tr>
 <tr class="memitem:ade066ddd1407f29fdcbd92a6bcf2b148 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplParams" colspan="2"><a id="ade066ddd1407f29fdcbd92a6bcf2b148"></a>
 template&lt;typename Wrapper &gt; </td></tr>
@@ -175,6 +184,9 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>doUnregister</b> (<a 
 <tr class="memitem:a0224a6220dd5c29cb46b991e2864491d"><td class="memItemLeft" align="right" valign="top"><a id="a0224a6220dd5c29cb46b991e2864491d"></a>
 bool&#160;</td><td class="memItemRight" valign="bottom"><b>doRegisterGateway</b> (<a class="el" href="classBeeeOn_1_1GatewayStatus.html">GatewayStatus</a> &amp;status, <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway)</td></tr>
 <tr class="separator:a0224a6220dd5c29cb46b991e2864491d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a35566c90ffa3003abe8b6e13607eebcd"><td class="memItemLeft" align="right" valign="top"><a id="a35566c90ffa3003abe8b6e13607eebcd"></a>
+bool&#160;</td><td class="memItemRight" valign="bottom"><b>doDeliverMessage</b> (<a class="el" href="classBeeeOn_1_1GatewayMessage.html">GatewayMessage</a> &amp;message)</td></tr>
+<tr class="separator:a35566c90ffa3003abe8b6e13607eebcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classBeeeOn_1_1Transactional"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classBeeeOn_1_1Transactional')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classBeeeOn_1_1Transactional.html">BeeeOn::Transactional</a></td></tr>
 <tr class="memitem:a2a56a9ceae53ce279d5c95338907172f inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a2a56a9ceae53ce279d5c95338907172f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>logTransactionStarted</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> *t, const char *file, unsigned int line)</td></tr>
@@ -237,6 +249,37 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</
 <tr class="separator:ad5ab586b4bd8f9f97552e475a008db44 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Member Function Documentation</h2>
+<a id="ac35a442f6112ffe68ea893b2b46af40f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac35a442f6112ffe68ea893b2b46af40f">&#9670;&nbsp;</a></span>deliverMessage()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool BeeeOn::GatewayServiceImpl::deliverMessage </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1GatewayMessage.html">GatewayMessage</a> &amp;&#160;</td>
+          <td class="paramname"><em>message</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">override</span><span class="mlabel">virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Deliver message of a gateway. </p>
+<dl class="section return"><dt>Returns</dt><dd>false if such message already exists </dd></dl>
+
+<p>Implements <a class="el" href="classBeeeOn_1_1GWSGatewayService.html#a49c7b3d39068f82a4da8361681b2c727">BeeeOn::GWSGatewayService</a>.</p>
+
+</div>
+</div>
 <a id="ab0083966c980452b0fe59bcc9a668f45"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ab0083966c980452b0fe59bcc9a668f45">&#9670;&nbsp;</a></span>registerGateway() <span class="overload">[1/2]</span></h2>
 

@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -57,6 +57,9 @@ $(function() {
 : <a class="el" href="classBeeeOn_1_1PosixSignal.html#aa6ebaf3fd6a6e81eff4adb9b48b2e793">BeeeOn::PosixSignal</a>
 , <a class="el" href="classBeeeOn_1_1ZeroMQSender.html#ab18334b531ad41ef6380ff913708e38a">BeeeOn::ZeroMQSender</a>
 </li>
+<li>sendFrame()
+: <a class="el" href="classBeeeOn_1_1WebSocketConnection.html#a0de3c0576ce3d7b4f6da402df794cf41">BeeeOn::WebSocketConnection</a>
+</li>
 <li>sendListen()
 : <a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#a75de3529e2b71bbd0488027979f55fac">BeeeOn::AsyncGatewayRPC</a>
 , <a class="el" href="classBeeeOn_1_1FakeGatewayRPC.html#a560e6dcee5b828fb340ad7c282f5cf58">BeeeOn::FakeGatewayRPC</a>
@@ -70,6 +73,9 @@ $(function() {
 </li>
 <li>sendNoBlock()
 : <a class="el" href="classBeeeOn_1_1ZeroMQSender.html#aa3a0412ae6fbc8e324c3cf8ef5243542">BeeeOn::ZeroMQSender</a>
+</li>
+<li>sendPong()
+: <a class="el" href="classBeeeOn_1_1WebSocketConnection.html#a9b4680fba38b9da4f8025ecb5a36e01e">BeeeOn::WebSocketConnection</a>
 </li>
 <li>session()
 : <a class="el" href="classBeeeOn_1_1RestFlow.html#a5e9d4eaab51eade64737a3792692ed7c">BeeeOn::RestFlow</a>
@@ -198,6 +204,9 @@ $(function() {
 <li>setJMXPort()
 : <a class="el" href="classBeeeOn_1_1CassandraStartup.html#a7a728877eaf313cfaee15f7653483d8c">BeeeOn::CassandraStartup</a>
 </li>
+<li>setLastActivity()
+: <a class="el" href="classBeeeOn_1_1Gateway.html#a3fc6ac58ec27da7d3c98c9a8360ac463">BeeeOn::Gateway</a>
+</li>
 <li>setLocale()
 : <a class="el" href="classBeeeOn_1_1JWToken.html#a2757d7904a2c9e75a632ea6093d8d40d">BeeeOn::JWToken</a>
 , <a class="el" href="classBeeeOn_1_1RestFlow.html#a4a7cde9e9f04ea234eb7b656c3c4a249">BeeeOn::RestFlow</a>
@@ -207,6 +216,12 @@ $(function() {
 </li>
 <li>setMaxMessageSize()
 : <a class="el" href="classBeeeOn_1_1WebSocketServer.html#afdab31112a880df2a4ffa1ea06480074">BeeeOn::WebSocketServer</a>
+</li>
+<li>setMaxRatePerHour()
+: <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiterFactory.html#a66ab436ee4915d7ca54b58c3c75af56b">BeeeOn::SlidingWindowRateLimiterFactory</a>
+</li>
+<li>setMaxRatePerMinute()
+: <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiterFactory.html#a76f519a399e9be69d8ed539faae52879">BeeeOn::SlidingWindowRateLimiterFactory</a>
 </li>
 <li>setName()
 : <a class="el" href="classBeeeOn_1_1DeviceEvent.html#a7001bc647c1c994a4b324a5e0b7f633a">BeeeOn::DeviceEvent</a>
@@ -343,6 +358,9 @@ $(function() {
 <li>setUserFetcher()
 : <a class="el" href="classBeeeOn_1_1OAuth2AuthProvider.html#ad3ebf50b3366c0f7f05c88ec78c2fbbe">BeeeOn::OAuth2AuthProvider</a>
 </li>
+<li>shiftWindow()
+: <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiter.html#a993a813c3f2ebf43598800948f83abea">BeeeOn::SlidingWindowRateLimiter</a>
+</li>
 <li>shortName()
 : <a class="el" href="classBeeeOn_1_1IcuTimeZoneImpl.html#aad6017d0d26b1a8c3f518480059dcea0">BeeeOn::IcuTimeZoneImpl</a>
 , <a class="el" href="classBeeeOn_1_1TimeZone.html#a0b304bff20d5feb1e29ee8b02745be6a">BeeeOn::TimeZone</a>
@@ -389,7 +407,7 @@ $(function() {
 : <a class="el" href="classBeeeOn_1_1BitmapsSAXHandler.html#a01ecefda2f62a21016f885193cb3cedf">BeeeOn::BitmapsSAXHandler</a>
 , <a class="el" href="classBeeeOn_1_1DevicesSAXHandler.html#a6dda3820221186bebd2e4b70197d1526">BeeeOn::DevicesSAXHandler</a>
 , <a class="el" href="classBeeeOn_1_1EnumsSAXHandler.html#a77ed9603953502837e0c9d9f574bec59">BeeeOn::EnumsSAXHandler</a>
-, <a class="el" href="classBeeeOn_1_1SAXHelper.html#a4db20092609a659141f6ceee0b14c1fe">BeeeOn::SAXHelper</a>
+, <a class="el" href="classBeeeOn_1_1SAXHelper.html#a7e97dfcac16655d8a1f5e8f89c983fb2">BeeeOn::SAXHelper</a>
 , <a class="el" href="classBeeeOn_1_1TypesSAXHandler.html#a9425a5129ef5536b15726c71deb5e9ee">BeeeOn::TypesSAXHandler</a>
 </li>
 <li>startSession()
@@ -436,6 +454,9 @@ $(function() {
 </li>
 <li>success()
 : <a class="el" href="classBeeeOn_1_1FailDetector.html#a7e568e28985fa3c94aa41d695660d229">BeeeOn::FailDetector</a>
+</li>
+<li>sumRange()
+: <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiter.html#a46f6c97121dc447c7182243fa6184683">BeeeOn::SlidingWindowRateLimiter</a>
 </li>
 <li>symbol()
 : <a class="el" href="classBeeeOn_1_1ModuleType_1_1Unit.html#a0802c1492f93c9aa18e943580410d296">BeeeOn::ModuleType::Unit</a>

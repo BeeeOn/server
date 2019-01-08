@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -64,9 +64,10 @@ Inheritance diagram for BeeeOn::AsyncGatewayRPC:</div>
  <div class="center">
   <img src="classBeeeOn_1_1AsyncGatewayRPC.png" usemap="#BeeeOn::AsyncGatewayRPC_map" alt=""/>
   <map id="BeeeOn::AsyncGatewayRPC_map" name="BeeeOn::AsyncGatewayRPC_map">
-<area href="classBeeeOn_1_1GatewayRPC.html" alt="BeeeOn::GatewayRPC" shape="rect" coords="0,0,174,24"/>
-<area href="classBeeeOn_1_1RPCForwarder.html" title="RPCForwarder provides an interface for the Gateway Server how to forward responses from the gateways ..." alt="BeeeOn::RPCForwarder" shape="rect" coords="184,0,358,24"/>
-<area href="classBeeeOn_1_1StoppableLoop.html" alt="BeeeOn::StoppableLoop" shape="rect" coords="368,0,542,24"/>
+<area href="classBeeeOn_1_1GatewayRPC.html" alt="BeeeOn::GatewayRPC" shape="rect" coords="0,56,174,80"/>
+<area href="classBeeeOn_1_1RPCForwarder.html" title="RPCForwarder provides an interface for the Gateway Server how to forward responses from the gateways ..." alt="BeeeOn::RPCForwarder" shape="rect" coords="184,56,358,80"/>
+<area href="classBeeeOn_1_1StoppableLoop.html" alt="BeeeOn::StoppableLoop" shape="rect" coords="368,56,542,80"/>
+<area href="classBeeeOn_1_1Transactional.html" alt="BeeeOn::Transactional" shape="rect" coords="552,56,726,80"/>
 <area href="classBeeeOn_1_1Loggable.html" alt="BeeeOn::Loggable" shape="rect" coords="552,0,726,24"/>
 </map>
  </div></div>
@@ -108,8 +109,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:accddbd7cc5e9a68d343fededfb1561c8"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af029faf29bfeadd647a23b60a9b1c2de"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#af029faf29bfeadd647a23b60a9b1c2de">unpairDevice</a> (GatewayRPCHandler::Ptr handler, const <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device) override</td></tr>
 <tr class="separator:af029faf29bfeadd647a23b60a9b1c2de"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ace302bd7a66ff668fdf193b78db9bb9f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#ace302bd7a66ff668fdf193b78db9bb9f">updateActor</a> (GatewayRPCHandler::Ptr handler, const <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device, const <a class="el" href="classBeeeOn_1_1ModuleInfo.html">ModuleInfo</a> &amp;module, double value, const Poco::Timespan &amp;timeout) override</td></tr>
-<tr class="separator:ace302bd7a66ff668fdf193b78db9bb9f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adeacc6a93f7fb71546519ded01f7ff69"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#adeacc6a93f7fb71546519ded01f7ff69">updateActor</a> (GatewayRPCHandler::Ptr handler, const <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device, const <a class="el" href="classBeeeOn_1_1ModuleInfo.html">ModuleInfo</a> &amp;module, double value, const Poco::Timespan &amp;timeout, const <a class="el" href="classBeeeOn_1_1Enum.html">OpMode</a> &amp;mode) override</td></tr>
+<tr class="separator:adeacc6a93f7fb71546519ded01f7ff69"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aea342058c8ce6ee8418680d23fc651a6"><td class="memItemLeft" align="right" valign="top"><a id="aea342058c8ce6ee8418680d23fc651a6"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#aea342058c8ce6ee8418680d23fc651a6">forwardResponse</a> (const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;gatewayID, GWResponse::Ptr response) override</td></tr>
 <tr class="memdesc:aea342058c8ce6ee8418680d23fc651a6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forwards response to the UI Server. <br /></td></tr>
@@ -122,18 +123,92 @@ void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="clas
 <tr class="separator:ab81885a6869378d80bfadfd89e0b149e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0828f497c04704b8df35743dc3442d60"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#a0828f497c04704b8df35743dc3442d60">stop</a> () override</td></tr>
 <tr class="separator:a0828f497c04704b8df35743dc3442d60"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae29c575fe0fd402b6a283a18ddf1a1d8"><td class="memItemLeft" align="right" valign="top"><a id="ae29c575fe0fd402b6a283a18ddf1a1d8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFinalResultTimeout</b> (const Poco::Timespan &amp;timeout)</td></tr>
-<tr class="separator:ae29c575fe0fd402b6a283a18ddf1a1d8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a57f3f9dcd47cdee980e526979ae80337"><td class="memItemLeft" align="right" valign="top"><a id="a57f3f9dcd47cdee980e526979ae80337"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setDefaultTimeout</b> (const Poco::Timespan &amp;timeout)</td></tr>
+<tr class="separator:a57f3f9dcd47cdee980e526979ae80337"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac91319aef8f71e463964ab303fba9a5f"><td class="memItemLeft" align="right" valign="top"><a id="ac91319aef8f71e463964ab303fba9a5f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setGatewayCommunicator</b> (GatewayCommunicator::Ptr communicator)</td></tr>
 <tr class="separator:ac91319aef8f71e463964ab303fba9a5f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a19d870c394b04cce89b2ad864d2e1494"><td class="memItemLeft" align="right" valign="top"><a id="a19d870c394b04cce89b2ad864d2e1494"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setGWResponseExpectedQueue</b> (GWResponseExpectedQueue::Ptr queue)</td></tr>
 <tr class="separator:a19d870c394b04cce89b2ad864d2e1494"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ac894bc27a92985b94148e2616c668d"><td class="memItemLeft" align="right" valign="top"><a id="a9ac894bc27a92985b94148e2616c668d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setDevicePropertyDao</b> (DevicePropertyDao::Ptr dao)</td></tr>
+<tr class="separator:a9ac894bc27a92985b94148e2616c668d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a801eaf67a61bae0d4993b8c9b077e583"><td class="memItemLeft" align="right" valign="top"><a id="a801eaf67a61bae0d4993b8c9b077e583"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setCryptoConfig</b> (Poco::SharedPtr&lt; <a class="el" href="classBeeeOn_1_1CryptoConfig.html">CryptoConfig</a> &gt; config)</td></tr>
+<tr class="separator:a801eaf67a61bae0d4993b8c9b077e583"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classBeeeOn_1_1Transactional"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1Transactional')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1Transactional.html">BeeeOn::Transactional</a></td></tr>
+<tr class="memitem:ade066ddd1407f29fdcbd92a6bcf2b148 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplParams" colspan="2"><a id="ade066ddd1407f29fdcbd92a6bcf2b148"></a>
+template&lt;typename Wrapper &gt; </td></tr>
+<tr class="memitem:ade066ddd1407f29fdcbd92a6bcf2b148 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplItemLeft" align="right" valign="top">&#160;</td><td class="memTemplItemRight" valign="bottom"><b>Transactional</b> (const Wrapper *)</td></tr>
+<tr class="separator:ade066ddd1407f29fdcbd92a6bcf2b148 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a84e4163309fd5e53b5d146da3497c0e1 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a84e4163309fd5e53b5d146da3497c0e1"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setTransactionManager</b> (TransactionManager::Ptr manager)</td></tr>
+<tr class="separator:a84e4163309fd5e53b5d146da3497c0e1 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a46ed093f5000014cc7f731578bfb82b4 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a46ed093f5000014cc7f731578bfb82b4"></a>
+TransactionManager::Ptr&#160;</td><td class="memItemRight" valign="bottom"><b>transactionManager</b> () const</td></tr>
+<tr class="separator:a46ed093f5000014cc7f731578bfb82b4 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1b0036a043a059200ba388c3f84b0bc0 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplParams" colspan="2"><a id="a1b0036a043a059200ba388c3f84b0bc0"></a>
+template&lt;typename Ret , typename A &gt; </td></tr>
+<tr class="memitem:a1b0036a043a059200ba388c3f84b0bc0 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplItemLeft" align="right" valign="top">Ret&#160;</td><td class="memTemplItemRight" valign="bottom"><b>transaction</b> (const A &amp;action)</td></tr>
+<tr class="separator:a1b0036a043a059200ba388c3f84b0bc0 inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad4b1b3529ab9e8456212f812be7dd44b inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplParams" colspan="2"><a id="ad4b1b3529ab9e8456212f812be7dd44b"></a>
+template&lt;typename A &gt; </td></tr>
+<tr class="memitem:ad4b1b3529ab9e8456212f812be7dd44b inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memTemplItemLeft" align="right" valign="top">void&#160;</td><td class="memTemplItemRight" valign="bottom"><b>transaction</b> (const A &amp;action)</td></tr>
+<tr class="separator:ad4b1b3529ab9e8456212f812be7dd44b inherit pub_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pub_methods_classBeeeOn_1_1Loggable"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1Loggable')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1Loggable.html">BeeeOn::Loggable</a></td></tr>
+<tr class="memitem:a28780034cab771631dfb4db98a7954bb inherit pub_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a28780034cab771631dfb4db98a7954bb"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Loggable</b> (const <a class="el" href="classBeeeOn_1_1ClassInfo.html">ClassInfo</a> &amp;info)</td></tr>
+<tr class="separator:a28780034cab771631dfb4db98a7954bb inherit pub_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aeba38a43bcc45e65dfb6455ad8ad2e1d inherit pub_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="aeba38a43bcc45e65dfb6455ad8ad2e1d"></a>
+&#160;</td><td class="memItemRight" valign="bottom"><b>Loggable</b> (const std::type_info &amp;info)</td></tr>
+<tr class="separator:aeba38a43bcc45e65dfb6455ad8ad2e1d inherit pub_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="inherited"></a>
 Additional Inherited Members</h2></td></tr>
+<tr class="inherit_header pub_static_methods_classBeeeOn_1_1Loggable"><td colspan="2" onclick="javascript:toggleInherit('pub_static_methods_classBeeeOn_1_1Loggable')"><img src="closed.png" alt="-"/>&#160;Static Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1Loggable.html">BeeeOn::Loggable</a></td></tr>
+<tr class="memitem:ae93889eade4537aea6abb3f383a8463e inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="ae93889eade4537aea6abb3f383a8463e"></a>
+static Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>forMethod</b> (const char *name)</td></tr>
+<tr class="separator:ae93889eade4537aea6abb3f383a8463e inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a559c00fe671201e7ee5cebf19706491d inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a559c00fe671201e7ee5cebf19706491d"></a>
+static Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>forClass</b> (const <a class="el" href="classBeeeOn_1_1ClassInfo.html">ClassInfo</a> &amp;info)</td></tr>
+<tr class="separator:a559c00fe671201e7ee5cebf19706491d inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a99f58cf545bb5550c42fbb75d4645c4a inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a99f58cf545bb5550c42fbb75d4645c4a"></a>
+static Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>forClass</b> (const std::type_info &amp;info)</td></tr>
+<tr class="separator:a99f58cf545bb5550c42fbb75d4645c4a inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9ddc275e696705f0e68a5332d2cd5960 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memTemplParams" colspan="2"><a id="a9ddc275e696705f0e68a5332d2cd5960"></a>
+template&lt;typename T &gt; </td></tr>
+<tr class="memitem:a9ddc275e696705f0e68a5332d2cd5960 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memTemplItemLeft" align="right" valign="top">static Poco::Logger &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>forInstance</b> (const T *i)</td></tr>
+<tr class="separator:a9ddc275e696705f0e68a5332d2cd5960 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5c03d407c8269d8fc9f71f0161ae17ae inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a5c03d407c8269d8fc9f71f0161ae17ae"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>configureSimple</b> (Poco::Logger &amp;logger, const std::string &amp;level)</td></tr>
+<tr class="separator:a5c03d407c8269d8fc9f71f0161ae17ae inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad5ab586b4bd8f9f97552e475a008db44 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="ad5ab586b4bd8f9f97552e475a008db44"></a>
+static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</b> (Poco::Logger &amp;logger, const Poco::Message::Priority priority, const Poco::Exception &amp;e, const char *file, size_t line)</td></tr>
+<tr class="separator:ad5ab586b4bd8f9f97552e475a008db44 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="inherit_header pro_methods_classBeeeOn_1_1Transactional"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classBeeeOn_1_1Transactional')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classBeeeOn_1_1Transactional.html">BeeeOn::Transactional</a></td></tr>
+<tr class="memitem:a2a56a9ceae53ce279d5c95338907172f inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a2a56a9ceae53ce279d5c95338907172f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>logTransactionStarted</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> *t, const char *file, unsigned int line)</td></tr>
+<tr class="separator:a2a56a9ceae53ce279d5c95338907172f inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7e1509eecbbe857caa968ff6a66bff7b inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a7e1509eecbbe857caa968ff6a66bff7b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>logTransactionCommit</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> *t, const char *file, unsigned int line)</td></tr>
+<tr class="separator:a7e1509eecbbe857caa968ff6a66bff7b inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adcfe2ad72d7527a7c993e6f9926ec9d2 inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="adcfe2ad72d7527a7c993e6f9926ec9d2"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>logTransactionRollback</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> *t, const char *file, unsigned int line)</td></tr>
+<tr class="separator:adcfe2ad72d7527a7c993e6f9926ec9d2 inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a110ee2dba02aaa48bea6cb931879e5bf inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a110ee2dba02aaa48bea6cb931879e5bf"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>transactionNotNull</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> *t)</td></tr>
+<tr class="separator:a110ee2dba02aaa48bea6cb931879e5bf inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1fee6ddf3032aecef026cb9ec7a88247 inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a1fee6ddf3032aecef026cb9ec7a88247"></a>
+const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>transactionStarted</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> &amp;t)</td></tr>
+<tr class="separator:a1fee6ddf3032aecef026cb9ec7a88247 inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abcb7b61cde9a50a0caf364c10d3363cf inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="abcb7b61cde9a50a0caf364c10d3363cf"></a>
+const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>transactionCommit</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> &amp;t)</td></tr>
+<tr class="separator:abcb7b61cde9a50a0caf364c10d3363cf inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5811c542ba12730a2e75a375990c7a67 inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memItemLeft" align="right" valign="top"><a id="a5811c542ba12730a2e75a375990c7a67"></a>
+const std::string&#160;</td><td class="memItemRight" valign="bottom"><b>transactionRollback</b> (const <a class="el" href="classBeeeOn_1_1Transaction.html">Transaction</a> &amp;t)</td></tr>
+<tr class="separator:a5811c542ba12730a2e75a375990c7a67 inherit pro_methods_classBeeeOn_1_1Transactional"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_methods_classBeeeOn_1_1Loggable"><td colspan="2" onclick="javascript:toggleInherit('pro_methods_classBeeeOn_1_1Loggable')"><img src="closed.png" alt="-"/>&#160;Protected Member Functions inherited from <a class="el" href="classBeeeOn_1_1Loggable.html">BeeeOn::Loggable</a></td></tr>
 <tr class="memitem:ac1c68e157429df380ff3805287baaa6f inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="ac1c68e157429df380ff3805287baaa6f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setupLogger</b> (Poco::Logger *logger=0) const</td></tr>
@@ -141,36 +216,10 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setupLogger</b> (Poco
 <tr class="memitem:a689ac76b94112bc55f9f528fc54a7d40 inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a689ac76b94112bc55f9f528fc54a7d40"></a>
 Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>logger</b> () const</td></tr>
 <tr class="separator:a689ac76b94112bc55f9f528fc54a7d40 inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28780034cab771631dfb4db98a7954bb inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a28780034cab771631dfb4db98a7954bb"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Loggable</b> (const <a class="el" href="classBeeeOn_1_1ClassInfo.html">ClassInfo</a> &amp;info)</td></tr>
-<tr class="separator:a28780034cab771631dfb4db98a7954bb inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeba38a43bcc45e65dfb6455ad8ad2e1d inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="aeba38a43bcc45e65dfb6455ad8ad2e1d"></a>
-&#160;</td><td class="memItemRight" valign="bottom"><b>Loggable</b> (const std::type_info &amp;info)</td></tr>
-<tr class="separator:aeba38a43bcc45e65dfb6455ad8ad2e1d inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pro_static_methods_classBeeeOn_1_1GatewayRPC"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classBeeeOn_1_1GatewayRPC')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classBeeeOn_1_1GatewayRPC.html">BeeeOn::GatewayRPC</a></td></tr>
 <tr class="memitem:a7a6ec5da5222466c5ac94e44bf10459b inherit pro_static_methods_classBeeeOn_1_1GatewayRPC"><td class="memItemLeft" align="right" valign="top"><a id="a7a6ec5da5222466c5ac94e44bf10459b"></a>
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>doHandle</b> (GatewayRPCHandler::Ptr handler, GatewayRPCResult::Ptr result)</td></tr>
 <tr class="separator:a7a6ec5da5222466c5ac94e44bf10459b inherit pro_static_methods_classBeeeOn_1_1GatewayRPC"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="inherit_header pro_static_methods_classBeeeOn_1_1Loggable"><td colspan="2" onclick="javascript:toggleInherit('pro_static_methods_classBeeeOn_1_1Loggable')"><img src="closed.png" alt="-"/>&#160;Static Protected Member Functions inherited from <a class="el" href="classBeeeOn_1_1Loggable.html">BeeeOn::Loggable</a></td></tr>
-<tr class="memitem:ae93889eade4537aea6abb3f383a8463e inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="ae93889eade4537aea6abb3f383a8463e"></a>
-static Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>forMethod</b> (const char *name)</td></tr>
-<tr class="separator:ae93889eade4537aea6abb3f383a8463e inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a559c00fe671201e7ee5cebf19706491d inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a559c00fe671201e7ee5cebf19706491d"></a>
-static Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>forClass</b> (const <a class="el" href="classBeeeOn_1_1ClassInfo.html">ClassInfo</a> &amp;info)</td></tr>
-<tr class="separator:a559c00fe671201e7ee5cebf19706491d inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a99f58cf545bb5550c42fbb75d4645c4a inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a99f58cf545bb5550c42fbb75d4645c4a"></a>
-static Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>forClass</b> (const std::type_info &amp;info)</td></tr>
-<tr class="separator:a99f58cf545bb5550c42fbb75d4645c4a inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9ddc275e696705f0e68a5332d2cd5960 inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memTemplParams" colspan="2"><a id="a9ddc275e696705f0e68a5332d2cd5960"></a>
-template&lt;typename T &gt; </td></tr>
-<tr class="memitem:a9ddc275e696705f0e68a5332d2cd5960 inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memTemplItemLeft" align="right" valign="top">static Poco::Logger &amp;&#160;</td><td class="memTemplItemRight" valign="bottom"><b>forInstance</b> (const T *i)</td></tr>
-<tr class="separator:a9ddc275e696705f0e68a5332d2cd5960 inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a5c03d407c8269d8fc9f71f0161ae17ae inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="a5c03d407c8269d8fc9f71f0161ae17ae"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>configureSimple</b> (Poco::Logger &amp;logger, const std::string &amp;level)</td></tr>
-<tr class="separator:a5c03d407c8269d8fc9f71f0161ae17ae inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ad5ab586b4bd8f9f97552e475a008db44 inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memItemLeft" align="right" valign="top"><a id="ad5ab586b4bd8f9f97552e475a008db44"></a>
-static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</b> (Poco::Logger &amp;logger, const Poco::Message::Priority priority, const Poco::Exception &amp;e, const char *file, size_t line)</td></tr>
-<tr class="separator:ad5ab586b4bd8f9f97552e475a008db44 inherit pro_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p><a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html" title="AsyncGatewayRPC provides asynchronous GatewayRPC intended to be used in the BeeeOn Server running as ...">AsyncGatewayRPC</a> provides asynchronous <a class="el" href="classBeeeOn_1_1GatewayRPC.html">GatewayRPC</a> intended to be used in the BeeeOn Server running as monolit. It allows to send commands to the gateways and receive partial results asynchronously. </p>
@@ -368,8 +417,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</
 
 </div>
 </div>
-<a id="ace302bd7a66ff668fdf193b78db9bb9f"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ace302bd7a66ff668fdf193b78db9bb9f">&#9670;&nbsp;</a></span>updateActor()</h2>
+<a id="adeacc6a93f7fb71546519ded01f7ff69"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#adeacc6a93f7fb71546519ded01f7ff69">&#9670;&nbsp;</a></span>updateActor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -411,7 +460,13 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Poco::Timespan &amp;&#160;</td>
-          <td class="paramname"><em>timeout</em>&#160;</td>
+          <td class="paramname"><em>timeout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classBeeeOn_1_1Enum.html">OpMode</a> &amp;&#160;</td>
+          <td class="paramname"><em>mode</em>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -427,7 +482,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</
 </div><div class="memdoc">
 <p>Send update command for the given module. </p>
 
-<p>Implements <a class="el" href="classBeeeOn_1_1GatewayRPC.html#a8761b1d761a5ddd3ba4b3434962f226d">BeeeOn::GatewayRPC</a>.</p>
+<p>Implements <a class="el" href="classBeeeOn_1_1GatewayRPC.html#a24203d1cc690d591b8672e1dc0683039">BeeeOn::GatewayRPC</a>.</p>
 
 </div>
 </div>

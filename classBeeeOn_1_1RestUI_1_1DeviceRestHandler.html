@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -71,23 +71,22 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setDeviceService</b> 
 <tr class="memitem:afc770ea21bd64caba6c2bb028caf85db"><td class="memItemLeft" align="right" valign="top"><a id="afc770ea21bd64caba6c2bb028caf85db"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setGatewayService</b> (Poco::SharedPtr&lt; <a class="el" href="classBeeeOn_1_1GatewayService.html">GatewayService</a> &gt; service)</td></tr>
 <tr class="separator:afc770ea21bd64caba6c2bb028caf85db"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af695d55c0f9abc1a28f1c12ad67cf97b"><td class="memItemLeft" align="right" valign="top"><a id="af695d55c0f9abc1a28f1c12ad67cf97b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>list</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:af695d55c0f9abc1a28f1c12ad67cf97b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1DeviceRestHandler.html#af695d55c0f9abc1a28f1c12ad67cf97b">list</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:af695d55c0f9abc1a28f1c12ad67cf97b"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all devices associated with the given gateway.  <a href="#af695d55c0f9abc1a28f1c12ad67cf97b">More...</a><br /></td></tr>
 <tr class="separator:af695d55c0f9abc1a28f1c12ad67cf97b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a24fd3b334ee1dcde0b40de100c306fc6"><td class="memItemLeft" align="right" valign="top"><a id="a24fd3b334ee1dcde0b40de100c306fc6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detail</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a24fd3b334ee1dcde0b40de100c306fc6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1DeviceRestHandler.html#a24fd3b334ee1dcde0b40de100c306fc6">detail</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a24fd3b334ee1dcde0b40de100c306fc6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show details of a device by the gateway ID and device ID. The property "active_since" is available only in case, when the device status is "active". The property "last_changed" is a more general and tells when the most recent state was changed. This allows to determine both when the device became "active" (same as "active_since") and when the device became "inactive".  <a href="#a24fd3b334ee1dcde0b40de100c306fc6">More...</a><br /></td></tr>
 <tr class="separator:a24fd3b334ee1dcde0b40de100c306fc6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af5ee9fa084d2b2d835a3c0b06d708f9d"><td class="memItemLeft" align="right" valign="top"><a id="af5ee9fa084d2b2d835a3c0b06d708f9d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>update</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:af5ee9fa084d2b2d835a3c0b06d708f9d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1DeviceRestHandler.html#af5ee9fa084d2b2d835a3c0b06d708f9d">update</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:af5ee9fa084d2b2d835a3c0b06d708f9d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Update editable information of a device. Note, that the refresh time might not be updatable for certain devices.  <a href="#af5ee9fa084d2b2d835a3c0b06d708f9d">More...</a><br /></td></tr>
 <tr class="separator:af5ee9fa084d2b2d835a3c0b06d708f9d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a919b91b013a7d43ec1946d9a636e3671"><td class="memItemLeft" align="right" valign="top"><a id="a919b91b013a7d43ec1946d9a636e3671"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>discover</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a919b91b013a7d43ec1946d9a636e3671"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1DeviceRestHandler.html#a919b91b013a7d43ec1946d9a636e3671">discover</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a919b91b013a7d43ec1946d9a636e3671"><td class="mdescLeft">&#160;</td><td class="mdescRight">Start discovery process on the associated gateway. The gateway would search for non-paired devices and report them to the server. Some technologies might require a manual intervation on the side of the gateway.  <a href="#a919b91b013a7d43ec1946d9a636e3671">More...</a><br /></td></tr>
 <tr class="separator:a919b91b013a7d43ec1946d9a636e3671"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a823367a021c562224a28e7f8cac389c3"><td class="memItemLeft" align="right" valign="top"><a id="a823367a021c562224a28e7f8cac389c3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>discoverStatus</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a823367a021c562224a28e7f8cac389c3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1DeviceRestHandler.html#a823367a021c562224a28e7f8cac389c3">discoverStatus</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
 <tr class="separator:a823367a021c562224a28e7f8cac389c3"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1966fe3d0a8884c6d92d5c002ec993d6"><td class="memItemLeft" align="right" valign="top"><a id="a1966fe3d0a8884c6d92d5c002ec993d6"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>unpair</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a1966fe3d0a8884c6d92d5c002ec993d6"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1DeviceRestHandler.html#a1966fe3d0a8884c6d92d5c002ec993d6">unpair</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a1966fe3d0a8884c6d92d5c002ec993d6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Unassociate a device from its gateway. Such device is not deleted, but it is no longer receiving data and cannot be remotely controlled in any other way. The semantics of the unpair operation might vary for different technologies. Some technologies would disassociate the device entirely, others would just stop reporting it at the highest level.  <a href="#a1966fe3d0a8884c6d92d5c002ec993d6">More...</a><br /></td></tr>
 <tr class="separator:a1966fe3d0a8884c6d92d5c002ec993d6"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -178,6 +177,297 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setupLogger</b> (Poco
 Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>logger</b> () const</td></tr>
 <tr class="separator:a689ac76b94112bc55f9f528fc54a7d40 inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a24fd3b334ee1dcde0b40de100c306fc6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24fd3b334ee1dcde0b40de100c306fc6">&#9670;&nbsp;</a></span>detail()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DeviceRestHandler::detail </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show details of a device by the gateway ID and device ID. The property "active_since" is available only in case, when the device status is "active". The property "last_changed" is a more general and tells when the most recent state was changed. This allows to determine both when the device became "active" (same as "active_since") and when the device became "inactive". </p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example output (data): <pre>
+{
+  "id": "0xa300000000000001",
+  "location_id: "c5c8c9f1-e501-42fd-8f4d-31744c8eeacc",
+  "name": "My favourite sensor",
+  "type": {
+    "name": "SuperS-3000X",
+    "display_name": "Super <a class="el" href="classBeeeOn_1_1Sensor.html" title="Class Sensor represents a one of many modules provided by a Device. ">Sensor</a> 3000",
+    "name": "Super Company"
+  },
+  "family": "vdev",
+  "first_seen": 1538567860,
+  "last_seen": 1538569021,
+  "active_since": 1538568123,
+  "last_changed": 1538568123,
+  "state": "active",
+  "refresh_time": 30,
+  "available": true
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="a919b91b013a7d43ec1946d9a636e3671"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a919b91b013a7d43ec1946d9a636e3671">&#9670;&nbsp;</a></span>discover()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DeviceRestHandler::discover </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Start discovery process on the associated gateway. The gateway would search for non-paired devices and report them to the server. Some technologies might require a manual intervation on the side of the gateway. </p>
+<ul>
+<li><a class="el" href="classBeeeOn_1_1Location.html">Location</a>: {DEVICE_DISCOVERY_STATUS_URI}</li>
+<li>usual responses: 202, 400</li>
+<li>example input: <pre>
+{
+  "time_limit": 30
+}
+</pre></li>
+<li>example output (data): <pre>
+{
+  "duration": 30,
+  "started": 1538569108,
+  "state": {
+    "name": "waiting",
+    "display_name": "In progress"
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="a823367a021c562224a28e7f8cac389c3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a823367a021c562224a28e7f8cac389c3">&#9670;&nbsp;</a></span>discoverStatus()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DeviceRestHandler::discoverStatus </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>The discovery process usually takes quite a long time (at least a minute, usually more, depending on the target technology). It is possible to set the maximal duration to be used, however, setting too low duration might lead to the situation that certain devices cannot be properly scanned o nthe gateway.</p>
+<p>The discovery process has the following possible states:</p>
+<ul>
+<li>idle - no discovery is in progress</li>
+<li>waiting - discovery request has been sent to gateway</li>
+<li>processing - discovery is in progress</li>
+<li>finished - discovery has finished successfully</li>
+<li>failed - discovery has failed or partially failed</li>
+</ul>
+<p>The discovery can fail only partially (this is not possible to distinguish at the moment from the API). Partial fail usually occurs in the following situations:</p>
+<ul>
+<li>given duration is too short for one of the supported technologies</li>
+<li>an appropriate dongle is missing for a certain technology (this can be considered as a bug on the BeeeOn <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a>)</li>
+<li>discovery of one or more technolgies really failes because of some resources issues, broken hardware, etc.</li>
+</ul>
+<p>The ultimate discovery failed means that for all supported technolgies it was not possible to properly perform the discovery process. This occures rarely.</p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example output - idle (data): <pre>
+{
+  "state": {
+    "name": "idle",
+    "display_name": "Idle"
+  }
+}
+</pre></li>
+<li>example output - waiting (data): <pre>
+{
+  "duration": 30,
+  "started": 1538569108,
+  "state": {
+    "name": "waiting",
+    "display_name": "In progress"
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="af695d55c0f9abc1a28f1c12ad67cf97b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af695d55c0f9abc1a28f1c12ad67cf97b">&#9670;&nbsp;</a></span>list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DeviceRestHandler::list </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>List all devices associated with the given gateway. </p>
+<ul>
+<li>usual responses: 200</li>
+<li>example output (data): <pre>
+[
+  {
+    "id": "0xa300000000000001",
+    "location_id: "c5c8c9f1-e501-42fd-8f4d-31744c8eeacc",
+    "name": "My favourite sensor",
+    "type": {
+      "name": "SuperS-3000X",
+      "display_name": "Super <a class="el" href="classBeeeOn_1_1Sensor.html" title="Class Sensor represents a one of many modules provided by a Device. ">Sensor</a> 3000",
+      "name": "Super Company"
+    },
+    "family": "vdev",
+    "first_seen": 1538567860,
+    "last_seen": 1538569021,
+    "active_since": 1538568123,
+    "last_changed": 1538568123,
+    "state": "active",
+    "refresh_time": 30,
+    "available": true
+  },
+  {
+    "id": "0xa600001012ad4912",
+    "location_id: "00000000-0000-0000-0000-000000000000",
+    "name": "My mobile phone",
+    "type": {
+      "name": "Unknown device",
+      "display_name": "Unknown device",
+      "name": "Bluetooth Availability"
+    },
+    "family": "bluetooth",
+    "first_seen": 1538565192,
+    "last_seen": 1538849021,
+    "last_changed": 1538569021,
+    "state": "inactive",
+    "available": false
+  }
+]
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="a1966fe3d0a8884c6d92d5c002ec993d6"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1966fe3d0a8884c6d92d5c002ec993d6">&#9670;&nbsp;</a></span>unpair()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DeviceRestHandler::unpair </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Unassociate a device from its gateway. Such device is not deleted, but it is no longer receiving data and cannot be remotely controlled in any other way. The semantics of the unpair operation might vary for different technologies. Some technologies would disassociate the device entirely, others would just stop reporting it at the highest level. </p>
+<ul>
+<li>usual responses: 202, 404</li>
+<li>example output (data): <pre>
+{
+  "id": "0xa300000000000002",
+  "location_id: "d087483a-a3ea-4736-ab2d-5f479bb16bfc",
+  "name": "My coolest device",
+  "type": {
+    "name": "SuperS-3000X",
+    "display_name": "Super <a class="el" href="classBeeeOn_1_1Sensor.html" title="Class Sensor represents a one of many modules provided by a Device. ">Sensor</a> 3000",
+    "name": "Super Company"
+  },
+  "family": "vdev",
+  "first_seen": 1538567860,
+  "last_seen": 1538569021,
+  "last_changed": 1538568123,
+  "state": "inactive",
+  "refresh_time": 50,
+  "available": true
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="af5ee9fa084d2b2d835a3c0b06d708f9d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af5ee9fa084d2b2d835a3c0b06d708f9d">&#9670;&nbsp;</a></span>update()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void DeviceRestHandler::update </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Update editable information of a device. Note, that the refresh time might not be updatable for certain devices. </p>
+<ul>
+<li>usual responses: 200, 400, 404</li>
+<li>example input: <pre>
+{
+  "name": "My coolest device",
+  "location_id": "d087483a-a3ea-4736-ab2d-5f479bb16bfc",
+  "refresh_time": 50
+}
+</pre></li>
+<li>example output (data): <pre>
+{
+  "id": "0xa300000000000002",
+  "location_id: "d087483a-a3ea-4736-ab2d-5f479bb16bfc",
+  "name": "My coolest device",
+  "type": {
+    "name": "SuperS-3000X",
+    "display_name": "Super <a class="el" href="classBeeeOn_1_1Sensor.html" title="Class Sensor represents a one of many modules provided by a Device. ">Sensor</a> 3000",
+    "name": "Super Company"
+  },
+  "family": "vdev",
+  "first_seen": 1538567860,
+  "last_seen": 1538569021,
+  "active_since": 1538568123,
+  "last_changed": 1538568123,
+  "state": "active",
+  "refresh_time": 50,
+  "available": true
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/<a class="el" href="DeviceRestHandler_8h_source.html">DeviceRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/DeviceRestHandler.cpp</li>

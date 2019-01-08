@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -123,8 +123,14 @@ $(function() {
 <li>KEY_IP_ADDRESS
 : <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a9b87c3b0423ace057048cc9a04a95c9d">BeeeOn::DevicePropertyKeyEnum</a>
 </li>
+<li>KEY_MAC_ADDRESS
+: <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a4e7e856c34a79043c476b5159ead8452">BeeeOn::DevicePropertyKeyEnum</a>
+</li>
 <li>KEY_PASSWORD
 : <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a60ddadec027919de6034500216c1b5e8">BeeeOn::DevicePropertyKeyEnum</a>
+</li>
+<li>KEY_SERIAL_NUMBER
+: <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727adc573652a2168fa75a9bb9183371ef03">BeeeOn::DevicePropertyKeyEnum</a>
 </li>
 </ul>
 
@@ -139,9 +145,14 @@ $(function() {
 <h3><a id="index_m"></a>- m -</h3><ul>
 <li>MODE_FAIL
 : <a class="el" href="classBeeeOn_1_1SingleInstanceChecker.html#aa6e7d35d816e73a9b20cc1e37e27f6dca4216d5a678fab7732492044e2ea446a1">BeeeOn::SingleInstanceChecker</a>
+, <a class="el" href="classBeeeOn_1_1StartupSecurityChecker.html#a3aacba9b2f2ff22c38a191f6900e71d2a698627aab1afe12837643a9653daf1c9">BeeeOn::StartupSecurityChecker</a>
 </li>
 <li>MODE_IGNORE
 : <a class="el" href="classBeeeOn_1_1SingleInstanceChecker.html#aa6e7d35d816e73a9b20cc1e37e27f6dca259701e51f3cbce2d89745cb5b18cb3c">BeeeOn::SingleInstanceChecker</a>
+, <a class="el" href="classBeeeOn_1_1StartupSecurityChecker.html#a3aacba9b2f2ff22c38a191f6900e71d2aac5f5cf43e33b6b9bdb2814ac9ad2cce">BeeeOn::StartupSecurityChecker</a>
+</li>
+<li>MODE_LAUD
+: <a class="el" href="classBeeeOn_1_1StartupSecurityChecker.html#a3aacba9b2f2ff22c38a191f6900e71d2ae6af04b2ae7b4ea54ac09450e5796758">BeeeOn::StartupSecurityChecker</a>
 </li>
 <li>MODE_RECOVER
 : <a class="el" href="classBeeeOn_1_1SingleInstanceChecker.html#aa6e7d35d816e73a9b20cc1e37e27f6dcac58cb8d31f89ea6111225e312dd8362b">BeeeOn::SingleInstanceChecker</a>
@@ -170,6 +181,9 @@ $(function() {
 <h3><a id="index_r"></a>- r -</h3><ul>
 <li>REPEAT
 : <a class="el" href="classBeeeOn_1_1TypeInfo_1_1Level.html#adad56b9a472270108948aae600274895ac0d5def0273f539e7292f71ff7193778">BeeeOn::TypeInfo::Level</a>
+</li>
+<li>REPEAT_ON_FAIL
+: <a class="el" href="classBeeeOn_1_1OpModeEnum.html#ac7c3dc7304a50aa9ac45392e597629dcaed9ac8c5fd5e724729b7fa440db0f071">BeeeOn::OpModeEnum</a>
 </li>
 </ul>
 
@@ -220,10 +234,16 @@ $(function() {
 <li>SUCCESS
 : <a class="el" href="classBeeeOn_1_1GWResponse.html#ad594924be839414190d5b33702acfc53a5c6929e462cc5bddc5f270bee58e86dc">BeeeOn::GWResponse</a>
 </li>
+<li>SUCCESS_PARTIAL
+: <a class="el" href="classBeeeOn_1_1GWResponse.html#ad594924be839414190d5b33702acfc53aeb3264de20e22f80a7fb25ef3ef475f8">BeeeOn::GWResponse</a>
+</li>
 </ul>
 
 
 <h3><a id="index_t"></a>- t -</h3><ul>
+<li>TRY_HARDER
+: <a class="el" href="classBeeeOn_1_1OpModeEnum.html#ac7c3dc7304a50aa9ac45392e597629dca89efa8edd17043b84820ee7d20caf255">BeeeOn::OpModeEnum</a>
+</li>
 <li>TYPE_AVAILABILITY
 : <a class="el" href="structBeeeOn_1_1ModuleType_1_1TypeEnum.html#a5bc8f51061c2e87ab1b23ad36ac90a07aa7c6a2c0cc9144954fadec0e20faeeef">BeeeOn::ModuleType::TypeEnum</a>
 </li>

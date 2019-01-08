@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -80,8 +80,8 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:aad067ee9b577f4fae9dedfba74ed1cba"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a26692dc4cd2a2e8bc43d3a52e3efd8cd"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayRPC.html#a26692dc4cd2a2e8bc43d3a52e3efd8cd">unpairDevice</a> (const GatewayRPCHandler::Ptr handler, const <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device)=0</td></tr>
 <tr class="separator:a26692dc4cd2a2e8bc43d3a52e3efd8cd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8761b1d761a5ddd3ba4b3434962f226d"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayRPC.html#a8761b1d761a5ddd3ba4b3434962f226d">updateActor</a> (const GatewayRPCHandler::Ptr handler, const <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device, const <a class="el" href="classBeeeOn_1_1ModuleInfo.html">ModuleInfo</a> &amp;module, double value, const Poco::Timespan &amp;timeout)=0</td></tr>
-<tr class="separator:a8761b1d761a5ddd3ba4b3434962f226d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a24203d1cc690d591b8672e1dc0683039"><td class="memItemLeft" align="right" valign="top">virtual void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayRPC.html#a24203d1cc690d591b8672e1dc0683039">updateActor</a> (const GatewayRPCHandler::Ptr handler, const <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> &amp;gateway, const <a class="el" href="classBeeeOn_1_1Device.html">Device</a> &amp;device, const <a class="el" href="classBeeeOn_1_1ModuleInfo.html">ModuleInfo</a> &amp;module, double value, const Poco::Timespan &amp;timeout, const <a class="el" href="classBeeeOn_1_1Enum.html">OpMode</a> &amp;mode=OpMode::TRY_ONCE)=0</td></tr>
+<tr class="separator:a24203d1cc690d591b8672e1dc0683039"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-static-methods"></a>
 Static Protected Member Functions</h2></td></tr>
@@ -227,8 +227,8 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>doHandle</b> (
 
 </div>
 </div>
-<a id="a8761b1d761a5ddd3ba4b3434962f226d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8761b1d761a5ddd3ba4b3434962f226d">&#9670;&nbsp;</a></span>updateActor()</h2>
+<a id="a24203d1cc690d591b8672e1dc0683039"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a24203d1cc690d591b8672e1dc0683039">&#9670;&nbsp;</a></span>updateActor()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -270,7 +270,13 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>doHandle</b> (
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype">const Poco::Timespan &amp;&#160;</td>
-          <td class="paramname"><em>timeout</em>&#160;</td>
+          <td class="paramname"><em>timeout</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const <a class="el" href="classBeeeOn_1_1Enum.html">OpMode</a> &amp;&#160;</td>
+          <td class="paramname"><em>mode</em> = <code>OpMode::TRY_ONCE</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -286,7 +292,7 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>doHandle</b> (
 </div><div class="memdoc">
 <p>Send update command for the given module. </p>
 
-<p>Implemented in <a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#ace302bd7a66ff668fdf193b78db9bb9f">BeeeOn::AsyncGatewayRPC</a>.</p>
+<p>Implemented in <a class="el" href="classBeeeOn_1_1AsyncGatewayRPC.html#adeacc6a93f7fb71546519ded01f7ff69">BeeeOn::AsyncGatewayRPC</a>.</p>
 
 </div>
 </div>

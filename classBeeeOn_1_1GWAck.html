@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -140,8 +140,14 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents an acknowledgement, that a response of the given id and status has been really delivered. It is intended to handle unreliable network connections. </p>
-<p>There can be more responses with the same id, so status is also needed to identify and confirm proper response. </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<p>There can be more responses with the same id, so status is also needed to identify and confirm proper response.</p>
+<p>An example of an ack message: </p><pre>
+{
+  "message_type": "generic_ack",
+  "id": "4c42288f-d592-4d6a-b401-0c2ef47c6d6d",
+  "status": 0
+}
+</pre> </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/base/src/gwmessage/<a class="el" href="GWAck_8h_source.html">GWAck.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/base/src/gwmessage/GWAck.cpp</li>
 </ul>

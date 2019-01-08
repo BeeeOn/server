@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -69,23 +69,20 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:af66be903ff843c5b09499d9d08ad2a2a"><td class="memItemLeft" align="right" valign="top"><a id="af66be903ff843c5b09499d9d08ad2a2a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setControlService</b> (ControlService::Ptr service)</td></tr>
 <tr class="separator:af66be903ff843c5b09499d9d08ad2a2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6606cfc45ff837bb914597180ee48d16"><td class="memItemLeft" align="right" valign="top"><a id="a6606cfc45ff837bb914597180ee48d16"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setTranslatorFactory</b> (TranslatorFactory::Ptr factory)</td></tr>
-<tr class="separator:a6606cfc45ff837bb914597180ee48d16"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a067115b499fc67bf77714ac8136421ad"><td class="memItemLeft" align="right" valign="top"><a id="a067115b499fc67bf77714ac8136421ad"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRequestTimeout</b> (const Poco::Timespan &amp;timeout)</td></tr>
 <tr class="separator:a067115b499fc67bf77714ac8136421ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9812d1a37b4d69e94e6da33ade602153"><td class="memItemLeft" align="right" valign="top"><a id="a9812d1a37b4d69e94e6da33ade602153"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>list</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a9812d1a37b4d69e94e6da33ade602153"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ControlRestHandler.html#a9812d1a37b4d69e94e6da33ade602153">list</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a9812d1a37b4d69e94e6da33ade602153"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all available controllable modules of the selected device.  <a href="#a9812d1a37b4d69e94e6da33ade602153">More...</a><br /></td></tr>
 <tr class="separator:a9812d1a37b4d69e94e6da33ade602153"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af204daeb8d9beef8f79e16e77119b2a8"><td class="memItemLeft" align="right" valign="top"><a id="af204daeb8d9beef8f79e16e77119b2a8"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detail</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:af204daeb8d9beef8f79e16e77119b2a8"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ControlRestHandler.html#af204daeb8d9beef8f79e16e77119b2a8">detail</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:af204daeb8d9beef8f79e16e77119b2a8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show details of a controllable module for the selected device by its device-unique ID.  <a href="#af204daeb8d9beef8f79e16e77119b2a8">More...</a><br /></td></tr>
 <tr class="separator:af204daeb8d9beef8f79e16e77119b2a8"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a1f79035c090dc14f705c231609789731"><td class="memItemLeft" align="right" valign="top"><a id="a1f79035c090dc14f705c231609789731"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>current</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a1f79035c090dc14f705c231609789731"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ControlRestHandler.html#a1f79035c090dc14f705c231609789731">current</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a1f79035c090dc14f705c231609789731"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show current data and state of the selected controllable module.  <a href="#a1f79035c090dc14f705c231609789731">More...</a><br /></td></tr>
 <tr class="separator:a1f79035c090dc14f705c231609789731"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a6e2c5b6aa70a88b1253f8ab3a3173395"><td class="memItemLeft" align="right" valign="top"><a id="a6e2c5b6aa70a88b1253f8ab3a3173395"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>requestChange</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a6e2c5b6aa70a88b1253f8ab3a3173395"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ControlRestHandler.html#a6e2c5b6aa70a88b1253f8ab3a3173395">requestChange</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a6e2c5b6aa70a88b1253f8ab3a3173395"><td class="mdescLeft">&#160;</td><td class="mdescRight">Initiate a request to change state of the selected controllable module. Only one request can be active at a time. If there is an already pending request, it is returned.  <a href="#a6e2c5b6aa70a88b1253f8ab3a3173395">More...</a><br /></td></tr>
 <tr class="separator:a6e2c5b6aa70a88b1253f8ab3a3173395"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -182,6 +179,198 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>configureSimpl
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</b> (Poco::Logger &amp;logger, const Poco::Message::Priority priority, const Poco::Exception &amp;e, const char *file, size_t line)</td></tr>
 <tr class="separator:ad5ab586b4bd8f9f97552e475a008db44 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a1f79035c090dc14f705c231609789731"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1f79035c090dc14f705c231609789731">&#9670;&nbsp;</a></span>current()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ControlRestHandler::current </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show current data and state of the selected controllable module. </p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example output (data): <pre>
+{
+  "state": {
+    "requested_value": 20,
+    "requested_at": 1543948549,
+    "finished_at": 1543948571,
+    "result": "failure"
+  }
+  "current": {
+    "value": 15,
+    "at": 1543947821
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="af204daeb8d9beef8f79e16e77119b2a8"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#af204daeb8d9beef8f79e16e77119b2a8">&#9670;&nbsp;</a></span>detail()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ControlRestHandler::detail </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show details of a controllable module for the selected device by its device-unique ID. </p>
+<p>Special properties:</p><ul>
+<li>group - allows to semantically group the module in UI</li>
+<li>order - recommendation how to order that module in UI</li>
+<li>current - if missing, nothing has been received from that module yet</li>
+<li>state - if missing, there was no request to change that module yet</li>
+</ul>
+<p>There can be only one request for a single controllable module at a time. The request has the property "result" explaining its status (possible values: "waiting", "success", "failure"). If the request has been already accepted by the appropriate gateway, the property "accepted_at" is non-null and holding the time of the acceptation. If the request is finished (successfully or insuccessfully), the property "finished_at" is non-null and holding the time of the finalization.</p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example output (data): <pre>
+{
+  "id": "0",
+  "display_name": "Target temperature",
+  "type_id": "temperature",
+  "group": "Thermostat",
+  "order": "0",
+  "current": {
+    "value": 15,
+    "at": 1543947821
+  },
+  "state": {
+    "requested_value": 15,
+    "requested_at": 1543947820,
+    "accepted_at": 1543947820,
+    "finished_at": 1543947821,
+    "result": "success"
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="a9812d1a37b4d69e94e6da33ade602153"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9812d1a37b4d69e94e6da33ade602153">&#9670;&nbsp;</a></span>list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ControlRestHandler::list </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>List all available controllable modules of the selected device. </p>
+<ul>
+<li>usual responses: 200</li>
+<li>example output (data): <pre>
+[
+  {
+    "id": "3",
+    "display_name": "On/Off",
+    "type_id": "on_off",
+    "order": "3",
+    "state": {
+      "requested_value": 0,
+      "requested_at": 1543947401,
+      "accepted_at": 1543947402,
+      "finished_at": 1543947411,
+      "result": "success"
+    }
+    "current": {
+      "value": 0,
+      "at": 1543947610
+    }
+  },
+  {
+    "id": "4",
+    "display_name": "Operation Mode",
+    "type_id": "enum",
+    "subtype_id": "OPERATION_MODE",
+    "order": "4",
+    "state": {
+      "requested_value": 2,
+      "requested_at": 1543947517,
+      "result": "waiting"
+    }
+    "current": {
+      "value": 1,
+      "at": 1543947364
+    }
+  }
+]
+</pre></li>
+</ul>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classBeeeOn_1_1RestUI_1_1ControlRestHandler.html#af204daeb8d9beef8f79e16e77119b2a8" title="Show details of a controllable module for the selected device by its device-unique ID...">BeeeOn::RestUI::ControlRestHandler::detail(BeeeOn::RestFlow &amp;)</a> </dd></dl>
+
+</div>
+</div>
+<a id="a6e2c5b6aa70a88b1253f8ab3a3173395"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6e2c5b6aa70a88b1253f8ab3a3173395">&#9670;&nbsp;</a></span>requestChange()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ControlRestHandler::requestChange </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Initiate a request to change state of the selected controllable module. Only one request can be active at a time. If there is an already pending request, it is returned. </p>
+<p>If a request is already in progress, server would return response code 423 (Locked). It is possible to cancel the previous request and start the new one by passing parameter "force" in the URL query part (<code>?force</code>).</p>
+<ul>
+<li>usual responses: 200, 400, 404, 423</li>
+<li>example input: <pre>
+{
+  "value": 1,
+  "timeout": 30
+}
+</pre></li>
+<li>example output (data): <pre>
+{
+  "state": {
+    "requested_value": 1,
+    "requested_at": 1543948549,
+    "result": "waiting"
+  }
+  "current": {
+    "value": 0,
+    "at": 1543947821
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/<a class="el" href="ControlRestHandler_8h_source.html">ControlRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/ControlRestHandler.cpp</li>

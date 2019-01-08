@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -47,6 +47,7 @@ $(function() {
 <div class="header">
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
+<a href="#pub-methods">Public Member Functions</a> &#124;
 <a href="#pub-static-methods">Static Public Member Functions</a>  </div>
   <div class="headertitle">
 <div class="title">BeeeOn::DevicePropertyKeyEnum Struct Reference</div>  </div>
@@ -64,12 +65,32 @@ Inheritance diagram for BeeeOn::DevicePropertyKeyEnum:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-types"></a>
 Public Types</h2></td></tr>
-<tr class="memitem:a099c8b4dac5b4dcd798842aa7a04c727"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727">Raw</a> { <b>KEY_INVALID</b> = 0, 
+<tr class="memitem:a099c8b4dac5b4dcd798842aa7a04c727"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727">Raw</a> { <br />
+&#160;&#160;<b>KEY_INVALID</b> = 0, 
 <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a9b87c3b0423ace057048cc9a04a95c9d">KEY_IP_ADDRESS</a> = 1, 
 <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a60ddadec027919de6034500216c1b5e8">KEY_PASSWORD</a> = 2, 
-<a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a8315a2ed68db3c071a3d71a700ffd320">KEY_FIRMWARE</a> = 3
+<a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a8315a2ed68db3c071a3d71a700ffd320">KEY_FIRMWARE</a> = 3, 
+<br />
+&#160;&#160;<a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727a4e7e856c34a79043c476b5159ead8452">KEY_MAC_ADDRESS</a> = 4, 
+<a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a099c8b4dac5b4dcd798842aa7a04c727adc573652a2168fa75a9bb9183371ef03">KEY_SERIAL_NUMBER</a> = 5
+<br />
  }</td></tr>
 <tr class="separator:a099c8b4dac5b4dcd798842aa7a04c727"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
+Public Member Functions</h2></td></tr>
+<tr class="memitem:a00a89dcb3fbc458ef1d08db7f41d675d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a00a89dcb3fbc458ef1d08db7f41d675d">isUserWritable</a> () const</td></tr>
+<tr class="separator:a00a89dcb3fbc458ef1d08db7f41d675d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a186570109347d20297a3787184dca7a3"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a186570109347d20297a3787184dca7a3">isUserReadable</a> () const</td></tr>
+<tr class="separator:a186570109347d20297a3787184dca7a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a994639181ddd7d129532aefa1784225b"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a994639181ddd7d129532aefa1784225b">isGatewayWritable</a> () const</td></tr>
+<tr class="separator:a994639181ddd7d129532aefa1784225b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab40be94d07a09e9e7d4a8347ddf00201"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#ab40be94d07a09e9e7d4a8347ddf00201">isGatewayReadable</a> () const</td></tr>
+<tr class="separator:ab40be94d07a09e9e7d4a8347ddf00201"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aad3ea606fd1cdf1441af0b468981c981"><td class="memItemLeft" align="right" valign="top"><a id="aad3ea606fd1cdf1441af0b468981c981"></a>
+<a class="el" href="classBeeeOn_1_1CryptoParams.html">CryptoParams</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#aad3ea606fd1cdf1441af0b468981c981">deriveParams</a> (const <a class="el" href="classBeeeOn_1_1CryptoConfig.html">CryptoConfig</a> &amp;config) const</td></tr>
+<tr class="memdesc:aad3ea606fd1cdf1441af0b468981c981"><td class="mdescLeft">&#160;</td><td class="mdescRight">Derive crypto params for property of this key. Some keys might require encryption while others might not. <br /></td></tr>
+<tr class="separator:aad3ea606fd1cdf1441af0b468981c981"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-static-methods"></a>
 Static Public Member Functions</h2></td></tr>
@@ -96,7 +117,84 @@ static <a class="el" href="structBeeeOn_1_1EnumHelper.html">EnumHelper</a>&lt; <
 </td></tr>
 <tr><td class="fieldname"><a id="a099c8b4dac5b4dcd798842aa7a04c727a8315a2ed68db3c071a3d71a700ffd320"></a>KEY_FIRMWARE&#160;</td><td class="fielddoc"><p>Information about detected firmware in the target device. </p>
 </td></tr>
+<tr><td class="fieldname"><a id="a099c8b4dac5b4dcd798842aa7a04c727a4e7e856c34a79043c476b5159ead8452"></a>KEY_MAC_ADDRESS&#160;</td><td class="fielddoc"><p>MAC Address of the associated device. </p>
+</td></tr>
+<tr><td class="fieldname"><a id="a099c8b4dac5b4dcd798842aa7a04c727adc573652a2168fa75a9bb9183371ef03"></a>KEY_SERIAL_NUMBER&#160;</td><td class="fielddoc"><p>Serial number of the associated device. </p>
+</td></tr>
 </table>
+
+</div>
+</div>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="ab40be94d07a09e9e7d4a8347ddf00201"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab40be94d07a09e9e7d4a8347ddf00201">&#9670;&nbsp;</a></span>isGatewayReadable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DevicePropertyKeyEnum::isGatewayReadable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>true if gateway can read this property </dd></dl>
+
+</div>
+</div>
+<a id="a994639181ddd7d129532aefa1784225b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a994639181ddd7d129532aefa1784225b">&#9670;&nbsp;</a></span>isGatewayWritable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DevicePropertyKeyEnum::isGatewayWritable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>true if gateway can write this property </dd></dl>
+
+</div>
+</div>
+<a id="a186570109347d20297a3787184dca7a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a186570109347d20297a3787184dca7a3">&#9670;&nbsp;</a></span>isUserReadable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DevicePropertyKeyEnum::isUserReadable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>true if user can read this property </dd></dl>
+
+</div>
+</div>
+<a id="a00a89dcb3fbc458ef1d08db7f41d675d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a00a89dcb3fbc458ef1d08db7f41d675d">&#9670;&nbsp;</a></span>isUserWritable()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool DevicePropertyKeyEnum::isUserWritable </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>true if user can write this property </dd></dl>
 
 </div>
 </div>

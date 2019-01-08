@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -64,6 +64,7 @@ Inheritance diagram for BeeeOn::DeviceWithData:</div>
   <map id="BeeeOn::DeviceWithData_map" name="BeeeOn::DeviceWithData_map">
 <area href="classBeeeOn_1_1Device.html" alt="BeeeOn::Device" shape="rect" coords="0,56,171,80"/>
 <area href="classBeeeOn_1_1Entity.html" alt="BeeeOn::Entity&lt; DeviceID &gt;" shape="rect" coords="0,0,171,24"/>
+<area href="classBeeeOn_1_1DeviceExtended.html" alt="BeeeOn::DeviceExtended" shape="rect" coords="0,168,171,192"/>
 </map>
  </div></div>
 <table class="memberdecls">
@@ -112,15 +113,12 @@ const Poco::SharedPtr&lt; <a class="el" href="classBeeeOn_1_1DeviceInfo.html">De
 <tr class="memitem:aa1ac00c19cd3ac7087e93f8113d7923f inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="aa1ac00c19cd3ac7087e93f8113d7923f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setRefresh</b> (const int seconds)</td></tr>
 <tr class="separator:aa1ac00c19cd3ac7087e93f8113d7923f inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a4b9384150186e93f12d83141fc8abd28 inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="a4b9384150186e93f12d83141fc8abd28"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setRefresh</b> (const Poco::Timespan &amp;refresh)</td></tr>
-<tr class="separator:a4b9384150186e93f12d83141fc8abd28 inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af78b7618f3452ca39d813859abc945b7 inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="af78b7618f3452ca39d813859abc945b7"></a>
-const Poco::Timespan &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>refresh</b> () const</td></tr>
-<tr class="separator:af78b7618f3452ca39d813859abc945b7 inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a43159048913c51cce35f46da5ccf3435 inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="a43159048913c51cce35f46da5ccf3435"></a>
-bool&#160;</td><td class="memItemRight" valign="bottom"><b>hasRefresh</b> () const</td></tr>
-<tr class="separator:a43159048913c51cce35f46da5ccf3435 inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acdc32eb6ea051bca35e3fd9bb792df1f inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="acdc32eb6ea051bca35e3fd9bb792df1f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setRefresh</b> (const <a class="el" href="classBeeeOn_1_1RefreshTime.html">RefreshTime</a> &amp;refresh)</td></tr>
+<tr class="separator:acdc32eb6ea051bca35e3fd9bb792df1f inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aff3166881d294d676782f087eeeceb03 inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="aff3166881d294d676782f087eeeceb03"></a>
+const <a class="el" href="classBeeeOn_1_1RefreshTime.html">RefreshTime</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>refresh</b> () const</td></tr>
+<tr class="separator:aff3166881d294d676782f087eeeceb03 inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad912950a52240a106444bd0cd8baa676 inherit pub_methods_classBeeeOn_1_1Device"><td class="memItemLeft" align="right" valign="top"><a id="ad912950a52240a106444bd0cd8baa676"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setBattery</b> (const unsigned int battery)</td></tr>
 <tr class="separator:ad912950a52240a106444bd0cd8baa676 inherit pub_methods_classBeeeOn_1_1Device"><td class="memSeparator" colspan="2">&#160;</td></tr>

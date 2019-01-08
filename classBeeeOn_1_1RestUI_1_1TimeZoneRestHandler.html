@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -69,14 +69,14 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a169a0ee3eec463a4b01ebbd5a077b353"><td class="memItemLeft" align="right" valign="top"><a id="a169a0ee3eec463a4b01ebbd5a077b353"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setTimeZoneProvider</b> (TimeZoneProvider::Ptr provider)</td></tr>
 <tr class="separator:a169a0ee3eec463a4b01ebbd5a077b353"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7e7e4dd57c69f0a9f93ddd9277f8a015"><td class="memItemLeft" align="right" valign="top"><a id="a7e7e4dd57c69f0a9f93ddd9277f8a015"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>list</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a7e7e4dd57c69f0a9f93ddd9277f8a015"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1TimeZoneRestHandler.html#a7e7e4dd57c69f0a9f93ddd9277f8a015">list</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a7e7e4dd57c69f0a9f93ddd9277f8a015"><td class="mdescLeft">&#160;</td><td class="mdescRight">List available time zones known to the server.  <a href="#a7e7e4dd57c69f0a9f93ddd9277f8a015">More...</a><br /></td></tr>
 <tr class="separator:a7e7e4dd57c69f0a9f93ddd9277f8a015"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a789149c1cb7787219954950894e01239"><td class="memItemLeft" align="right" valign="top"><a id="a789149c1cb7787219954950894e01239"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detailByID</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a789149c1cb7787219954950894e01239"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1TimeZoneRestHandler.html#a789149c1cb7787219954950894e01239">detailByID</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a789149c1cb7787219954950894e01239"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show details of a time zone by its ID.  <a href="#a789149c1cb7787219954950894e01239">More...</a><br /></td></tr>
 <tr class="separator:a789149c1cb7787219954950894e01239"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaafe7ea2120c4cdd4515dcfd8805b5e9"><td class="memItemLeft" align="right" valign="top"><a id="aaafe7ea2120c4cdd4515dcfd8805b5e9"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detailByPair</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:aaafe7ea2120c4cdd4515dcfd8805b5e9"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1TimeZoneRestHandler.html#aaafe7ea2120c4cdd4515dcfd8805b5e9">detailByPair</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:aaafe7ea2120c4cdd4515dcfd8805b5e9"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show details of a time zone by the combination country/city. The time zone ID is often expressed in the format country/city which does not fit into the URL path as 1 single item. This endpoint has thus the same semantics as <a class="el" href="classBeeeOn_1_1RestUI_1_1TimeZoneRestHandler.html#a789149c1cb7787219954950894e01239" title="Show details of a time zone by its ID. ">detailByID()</a>.  <a href="#aaafe7ea2120c4cdd4515dcfd8805b5e9">More...</a><br /></td></tr>
 <tr class="separator:aaafe7ea2120c4cdd4515dcfd8805b5e9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -173,6 +173,136 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>configureSimpl
 static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</b> (Poco::Logger &amp;logger, const Poco::Message::Priority priority, const Poco::Exception &amp;e, const char *file, size_t line)</td></tr>
 <tr class="separator:ad5ab586b4bd8f9f97552e475a008db44 inherit pub_static_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a789149c1cb7787219954950894e01239"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a789149c1cb7787219954950894e01239">&#9670;&nbsp;</a></span>detailByID()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TimeZoneRestHandler::detailByID </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show details of a time zone by its ID. </p>
+<p>Each time zone is described by its unique ID and offsets from the UTC time. In case when a time zone uses the DST (daylight saving time), the additional properties are to be considered:</p>
+<ul>
+<li>dst_offset - offset when DST is in effect</li>
+<li>dst_in_effect - 1 when it is in effect right know, otherwise 0</li>
+</ul>
+<p>The dst_in_effect property changes during the year according to the current time and date.</p>
+<ul>
+<li>usual responses: 200, 404</li>
+<li>example output (data): <pre>
+{
+  {
+    "id": "Europe/Prague",
+    "short_name": "GMT+01:00",
+    "display_name": "Europe/Prague (GMT+01:00)",
+    "utc_offset": 3600,
+    "dst_offset": 3600,
+    "dst_in_effect": 0
+  }
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
+<a id="aaafe7ea2120c4cdd4515dcfd8805b5e9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aaafe7ea2120c4cdd4515dcfd8805b5e9">&#9670;&nbsp;</a></span>detailByPair()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TimeZoneRestHandler::detailByPair </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show details of a time zone by the combination country/city. The time zone ID is often expressed in the format country/city which does not fit into the URL path as 1 single item. This endpoint has thus the same semantics as <a class="el" href="classBeeeOn_1_1RestUI_1_1TimeZoneRestHandler.html#a789149c1cb7787219954950894e01239" title="Show details of a time zone by its ID. ">detailByID()</a>. </p>
+<dl class="section see"><dt>See also</dt><dd><a class="el" href="classBeeeOn_1_1RestUI_1_1TimeZoneRestHandler.html#a789149c1cb7787219954950894e01239" title="Show details of a time zone by its ID. ">BeeeOn::RestUI::TimeZoneRestHandler::detailByID(BeeeOn::RestFlow &amp;)</a> </dd></dl>
+
+</div>
+</div>
+<a id="a7e7e4dd57c69f0a9f93ddd9277f8a015"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a7e7e4dd57c69f0a9f93ddd9277f8a015">&#9670;&nbsp;</a></span>list()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void TimeZoneRestHandler::list </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>List available time zones known to the server. </p>
+<ul>
+<li>usual responses: 200</li>
+<li>example output (data): <pre>
+[
+  {
+    "id": "Africa/Abidjan",
+    "short_name": "GMT",
+    "display_name": "Africa/Abidjan (GMT)",
+    "utc_offset": 0,
+    "dst_offset": 0,
+    "dst_in_effect": 0
+  },
+  {
+    "id": "Africa/Accra",
+    "short_name": "GMT",
+    "display_name": "Africa/Accra (GMT)",
+    "utc_offset": 0,
+    "dst_offset": 0,
+    "dst_in_effect": 0
+  },
+  {
+    "id": "America/Santiago",
+    "short_name": "GMT-03:00",
+    "display_name": "America/Santiago (GMT-03:00)",
+    "utc_offset": -14400,
+    "dst_offset": 3600,
+    "dst_in_effect": 1
+  },
+  {
+    "id": "Europe/Budapest",
+    "short_name": "GMT+01:00",
+    "display_name": "Europe/Budapest (GMT+01:00)",
+    "utc_offset": 3600,
+    "dst_offset": 3600,
+    "dst_in_effect": 0
+  },
+  {
+    "id": "Europe/Prague",
+    "short_name": "GMT+01:00",
+    "display_name": "Europe/Prague (GMT+01:00)",
+    "utc_offset": 3600,
+    "dst_offset": 3600,
+    "dst_in_effect": 0
+  }
+]
+</pre> </li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/<a class="el" href="TimeZoneRestHandler_8h_source.html">TimeZoneRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/TimeZoneRestHandler.cpp</li>

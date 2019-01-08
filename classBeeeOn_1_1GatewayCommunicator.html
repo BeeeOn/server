@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -97,6 +97,8 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a663f8b4c5884d4c1915805d0e4d09e0f"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayCommunicator.html#a663f8b4c5884d4c1915805d0e4d09e0f">removeIfInactive</a> (const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;id, const Poco::Timestamp &amp;timeFrom)</td></tr>
 <tr class="memdesc:a663f8b4c5884d4c1915805d0e4d09e0f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Remove <a class="el" href="classBeeeOn_1_1Gateway.html">Gateway</a> from the <a class="el" href="classBeeeOn_1_1GatewayCommunicator.html" title="GatewayCommunicator is responsible for communication with gateways connected to the server...">GatewayCommunicator</a>, if no message was received from the given time till now.  <a href="#a663f8b4c5884d4c1915805d0e4d09e0f">More...</a><br /></td></tr>
 <tr class="separator:a663f8b4c5884d4c1915805d0e4d09e0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5b3c66056cd578dfff5e1efdab4de1ad"><td class="memItemLeft" align="right" valign="top">Poco::Nullable&lt; Poco::Timestamp &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayCommunicator.html#a5b3c66056cd578dfff5e1efdab4de1ad">lastActivity</a> (const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;id) const</td></tr>
+<tr class="separator:a5b3c66056cd578dfff5e1efdab4de1ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1604bc0d7dc746e318ed8c17e137563a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1GatewayCommunicator.html#a1604bc0d7dc746e318ed8c17e137563a">sendMessage</a> (const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;gatewayID, const GWMessage::Ptr message)</td></tr>
 <tr class="memdesc:a1604bc0d7dc746e318ed8c17e137563a"><td class="mdescLeft">&#160;</td><td class="mdescRight">Sends <a class="el" href="classBeeeOn_1_1GWMessage.html" title="The GWMessage is abstract class representing messages (including their contents), that are being sent...">GWMessage</a> to the connected gateway.  <a href="#a1604bc0d7dc746e318ed8c17e137563a">More...</a><br /></td></tr>
 <tr class="separator:a1604bc0d7dc746e318ed8c17e137563a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -115,6 +117,12 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setReceiveTimeout</b>
 <tr class="memitem:aae73c38edc3a9454a5148b1f218d1a8f"><td class="memItemLeft" align="right" valign="top"><a id="aae73c38edc3a9454a5148b1f218d1a8f"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setSendTimeout</b> (const Poco::Timespan &amp;timeout)</td></tr>
 <tr class="separator:aae73c38edc3a9454a5148b1f218d1a8f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a079fac323f4ac1e3c66ab0a3d562bd5d"><td class="memItemLeft" align="right" valign="top"><a id="a079fac323f4ac1e3c66ab0a3d562bd5d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setMaxBulkDuration</b> (const Poco::Timespan &amp;duration)</td></tr>
+<tr class="separator:a079fac323f4ac1e3c66ab0a3d562bd5d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aa77794c1550109f2768e46f436fc6dd7"><td class="memItemLeft" align="right" valign="top"><a id="aa77794c1550109f2768e46f436fc6dd7"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setMaxBulkSize</b> (int size)</td></tr>
+<tr class="separator:aa77794c1550109f2768e46f436fc6dd7"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a70ea47a3aebf0dd6453335bb730690dd"><td class="memItemLeft" align="right" valign="top"><a id="a70ea47a3aebf0dd6453335bb730690dd"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>registerListener</b> (GatewayListener::Ptr listener)</td></tr>
 <tr class="separator:a70ea47a3aebf0dd6453335bb730690dd"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -214,6 +222,25 @@ static void&#160;</td><td class="memItemRight" valign="bottom"><b>logException</
 
 <p>Create new <a class="el" href="classBeeeOn_1_1GatewayConnection.html" title="Represents a connection with the specific gateway. ">GatewayConnection</a> for the given id and add it to the communicator. </p>
 <p>If there is a <a class="el" href="classBeeeOn_1_1GatewayConnection.html" title="Represents a connection with the specific gateway. ">GatewayConnection</a> with the given id in the <a class="el" href="classBeeeOn_1_1GatewayCommunicator.html" title="GatewayCommunicator is responsible for communication with gateways connected to the server...">GatewayCommunicator</a>, it is replaced by new one. </p>
+
+</div>
+</div>
+<a id="a5b3c66056cd578dfff5e1efdab4de1ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5b3c66056cd578dfff5e1efdab4de1ad">&#9670;&nbsp;</a></span>lastActivity()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">Nullable&lt; Timestamp &gt; GatewayCommunicator::lastActivity </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classBeeeOn_1_1GatewayID.html">GatewayID</a> &amp;&#160;</td>
+          <td class="paramname"><em>id</em></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<dl class="section return"><dt>Returns</dt><dd>timestamp of the most recent activity of the given gateway or null if no such gateway is connected </dd></dl>
 
 </div>
 </div>

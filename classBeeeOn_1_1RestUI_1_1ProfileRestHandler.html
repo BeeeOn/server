@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -68,14 +68,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a6906943e4c931f3c440c1f1baef2190c"><td class="memItemLeft" align="right" valign="top"><a id="a6906943e4c931f3c440c1f1baef2190c"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setIdentityService</b> (IdentityService::Ptr service)</td></tr>
 <tr class="separator:a6906943e4c931f3c440c1f1baef2190c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae149de804fb37246075b56626277c3e2"><td class="memItemLeft" align="right" valign="top"><a id="ae149de804fb37246075b56626277c3e2"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>detail</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:ae149de804fb37246075b56626277c3e2"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ProfileRestHandler.html#ae149de804fb37246075b56626277c3e2">detail</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:ae149de804fb37246075b56626277c3e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Show details of a profiles given by ID.  <a href="#ae149de804fb37246075b56626277c3e2">More...</a><br /></td></tr>
 <tr class="separator:ae149de804fb37246075b56626277c3e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a78f3369628e609ae05c0e190b14b47eb"><td class="memItemLeft" align="right" valign="top"><a id="a78f3369628e609ae05c0e190b14b47eb"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>current</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a78f3369628e609ae05c0e190b14b47eb"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ProfileRestHandler.html#a78f3369628e609ae05c0e190b14b47eb">current</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a78f3369628e609ae05c0e190b14b47eb"><td class="mdescLeft">&#160;</td><td class="mdescRight">Redirect to detail of the current profile.  <a href="#a78f3369628e609ae05c0e190b14b47eb">More...</a><br /></td></tr>
 <tr class="separator:a78f3369628e609ae05c0e190b14b47eb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:adbfb40cf64574c3950cb8a0b0a36c33d"><td class="memItemLeft" align="right" valign="top"><a id="adbfb40cf64574c3950cb8a0b0a36c33d"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>list</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1RestUI_1_1ProfileRestHandler.html#adbfb40cf64574c3950cb8a0b0a36c33d">list</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:adbfb40cf64574c3950cb8a0b0a36c33d"><td class="mdescLeft">&#160;</td><td class="mdescRight">List all profiles available for the current user. <a class="el" href="classBeeeOn_1_1User.html">User</a> profiles are usually sharing the same e-mail address but the profile identities are verified by different identity providers (Google, Facebook, etc.). <br /></td></tr>
 <tr class="separator:adbfb40cf64574c3950cb8a0b0a36c33d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -166,6 +167,66 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setupLogger</b> (Poco
 Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>logger</b> () const</td></tr>
 <tr class="separator:a689ac76b94112bc55f9f528fc54a7d40 inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a78f3369628e609ae05c0e190b14b47eb"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a78f3369628e609ae05c0e190b14b47eb">&#9670;&nbsp;</a></span>current()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ProfileRestHandler::current </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Redirect to detail of the current profile. </p>
+<ul>
+<li><a class="el" href="classBeeeOn_1_1Location.html">Location</a>: {PROFILE_CURRENT_DETAIL}</li>
+<li>usual responses: 303 </li>
+</ul>
+
+</div>
+</div>
+<a id="ae149de804fb37246075b56626277c3e2"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae149de804fb37246075b56626277c3e2">&#9670;&nbsp;</a></span>detail()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ProfileRestHandler::detail </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Show details of a profiles given by ID. </p>
+<ul>
+<li>example output (data): <pre>
+{
+  "id": "282d100d-a35c-4a93-a45a-1d741f381f12",
+  "first_name": "John",
+  "last_name": "John",
+  "locale": "cs_CZ",
+  "locale_display_name": "Česká republika",
+  "email": "john.smith@example.org",
+  "picture_url": "",
+  "provider": "google",
+  "provider_display_name": "Google"
+}
+</pre> </li>
+</ul>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/<a class="el" href="ProfileRestHandler_8h_source.html">ProfileRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/restui/ProfileRestHandler.cpp</li>

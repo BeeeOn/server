@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -44,6 +44,9 @@ $(function() {
 <div class="textblock">Here is a list of all documented struct and union fields with links to the struct/union documentation for each field:</div>
 
 <h3><a id="index_c"></a>- c -</h3><ul>
+<li>callback()
+: <a class="el" href="classBeeeOn_1_1RestUI_1_1OAuth2CallbackRestHandler.html#adbc49d5a78a45e673d79708533964e23">BeeeOn::RestUI::OAuth2CallbackRestHandler</a>
+</li>
 <li>cancel()
 : <a class="el" href="classBeeeOn_1_1BlockingAsyncWork.html#a196b9cb3c2447c1229afca08b2ffd963">BeeeOn::BlockingAsyncWork&lt; Result &gt;</a>
 , <a class="el" href="classBeeeOn_1_1Cancellable.html#a6e9ea1463250fe27dc762e22b812a4fc">BeeeOn::Cancellable</a>
@@ -56,7 +59,11 @@ $(function() {
 , <a class="el" href="classBeeeOn_1_1RoleInGatewayDao.html#a5eb8384f71d2b3a490e577b65289d7e3">BeeeOn::RoleInGatewayDao</a>
 </li>
 <li>cast()
-: <a class="el" href="structBeeeOn_1_1DIWCastImpl.html#a9bb6e4d00d9fc09ec4db413a96eed538">BeeeOn::DIWCastImpl&lt; From, To &gt;</a>
+: <a class="el" href="classBeeeOn_1_1DIFactory.html#aa79c7aaf3b8785cc8781ee7594ccea57">BeeeOn::DIFactory</a>
+, <a class="el" href="structBeeeOn_1_1DIWCastImpl.html#a9bb6e4d00d9fc09ec4db413a96eed538">BeeeOn::DIWCastImpl&lt; From, To &gt;</a>
+</li>
+<li>castImpl()
+: <a class="el" href="classBeeeOn_1_1DIFactory.html#aa3d4310b65d8e7c330f8079619f567c1">BeeeOn::DIFactory</a>
 </li>
 <li>caught()
 : <a class="el" href="classBeeeOn_1_1MultiException.html#a4ce7ba128f7ccdcb23765d757a85f9df">BeeeOn::MultiException</a>
@@ -75,6 +82,10 @@ $(function() {
 </li>
 <li>check()
 : <a class="el" href="classBeeeOn_1_1SingleInstanceChecker.html#a43ce3b7eb7ee9f325dca56beac8c9ed7">BeeeOn::SingleInstanceChecker</a>
+, <a class="el" href="classBeeeOn_1_1StartupSecurityChecker.html#a432aab7819e38a1df97700a086d2bb4d">BeeeOn::StartupSecurityChecker</a>
+</li>
+<li>checkBuffer()
+: <a class="el" href="classBeeeOn_1_1WebSocketConnection.html#ad8d116b98a8f6f9b051d5febce5bb490">BeeeOn::WebSocketConnection</a>
 </li>
 <li>cleanup()
 : <a class="el" href="classBeeeOn_1_1GWMessageHandlerImpl.html#a55068b8f83674493059b6a67aaa6a2c6">BeeeOn::GWMessageHandlerImpl</a>
@@ -135,6 +146,7 @@ $(function() {
 </li>
 <li>create()
 : <a class="el" href="classBeeeOn_1_1BackOffFactory.html#ada9688d204d1702aadb1d255dd394432">BeeeOn::BackOffFactory</a>
+, <a class="el" href="classBeeeOn_1_1DIFactory.html#a43fae23d6025fb503c872b6143842ebe">BeeeOn::DIFactory</a>
 , <a class="el" href="classBeeeOn_1_1ExponentialBackOffFactory.html#a1ab4745d73a88d8fdf7067aad11cf9cd">BeeeOn::ExponentialBackOffFactory</a>
 , <a class="el" href="classBeeeOn_1_1GatewayRateLimiterFactory.html#a317b90438e45114e9f4434a3c59c22a3">BeeeOn::GatewayRateLimiterFactory</a>
 , <a class="el" href="classBeeeOn_1_1IcuTranslatorFactory.html#a1d57ae81b639f8a2d8af899e69c63830">BeeeOn::IcuTranslatorFactory</a>
@@ -143,9 +155,15 @@ $(function() {
 , <a class="el" href="classBeeeOn_1_1NoTranslatorFactory.html#afa4868d36403724f38c84074355dadca">BeeeOn::NoTranslatorFactory</a>
 , <a class="el" href="classBeeeOn_1_1PocoTransactionFactory.html#aee31395530c2f4f27342e3e74c786e7a">BeeeOn::PocoTransactionFactory</a>
 , <a class="el" href="classBeeeOn_1_1RandomBackOffFactory.html#a2c783793e3f0618cbcef2416d07f1ad0">BeeeOn::RandomBackOffFactory</a>
+, <a class="el" href="classBeeeOn_1_1RestUI_1_1DevicePropertiesRestHandler.html#abbd866ec398957bd95c6a6c6c80fad77">BeeeOn::RestUI::DevicePropertiesRestHandler</a>
+, <a class="el" href="classBeeeOn_1_1RestUI_1_1RoleRestHandler.html#a4eb04718ab5bd63aef08c33f0370387c">BeeeOn::RestUI::RoleRestHandler</a>
+, <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiterFactory.html#ac401757bd941b26924cf1510cce0ba80">BeeeOn::SlidingWindowRateLimiterFactory</a>
 , <a class="el" href="classBeeeOn_1_1TransactionFactory.html#a47cf4c0f700fe220278d86c9d90f863c">BeeeOn::TransactionFactory</a>
 , <a class="el" href="classBeeeOn_1_1TranslatorFactory.html#a00135981a2a725f6a209af6236f189fc">BeeeOn::TranslatorFactory</a>
 , <a class="el" href="classBeeeOn_1_1ZeroMQSender.html#a6f6a42db3274b32bcb9a7120f31e010f">BeeeOn::ZeroMQSender</a>
+</li>
+<li>createImpl()
+: <a class="el" href="classBeeeOn_1_1DIFactory.html#a7f30173bc8a40e000f542b4fd55c123b">BeeeOn::DIFactory</a>
 </li>
 <li>createKey()
 : <a class="el" href="classBeeeOn_1_1CryptoConfig.html#ab639c0c78dcbb2044304b26b3cc9919d">BeeeOn::CryptoConfig</a>
@@ -160,7 +178,11 @@ $(function() {
 : <a class="el" href="classBeeeOn_1_1CryptoConfig.html#a6c61c14cdb291be4f744c9193b6e0708">BeeeOn::CryptoConfig</a>
 </li>
 <li>current()
-: <a class="el" href="classBeeeOn_1_1SAXHelper.html#a875bd7ce9d92e0b40c0c94c28fd3645d">BeeeOn::SAXHelper</a>
+: <a class="el" href="classBeeeOn_1_1RestUI_1_1ControlRestHandler.html#a1f79035c090dc14f705c231609789731">BeeeOn::RestUI::ControlRestHandler</a>
+, <a class="el" href="classBeeeOn_1_1RestUI_1_1ProfileRestHandler.html#a78f3369628e609ae05c0e190b14b47eb">BeeeOn::RestUI::ProfileRestHandler</a>
+, <a class="el" href="classBeeeOn_1_1RestUI_1_1RoleRestHandler.html#a01438bbd6027c11bafb6168976bfc440">BeeeOn::RestUI::RoleRestHandler</a>
+, <a class="el" href="classBeeeOn_1_1RestUI_1_1SensorRestHandler.html#ab405ffa2e1fa5085768ba3dd342cabd4">BeeeOn::RestUI::SensorRestHandler</a>
+, <a class="el" href="classBeeeOn_1_1SAXHelper.html#a875bd7ce9d92e0b40c0c94c28fd3645d">BeeeOn::SAXHelper</a>
 , <a class="el" href="classBeeeOn_1_1ThreadLocalTransactionManager.html#af25bbed82abc577ed4b0218013ab3ed5">BeeeOn::ThreadLocalTransactionManager</a>
 , <a class="el" href="classBeeeOn_1_1TransactionManager.html#a03f6302d319e153c8509805d17da9c11">BeeeOn::TransactionManager</a>
 </li>

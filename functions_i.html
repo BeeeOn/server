@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -59,6 +59,7 @@ $(function() {
 , <a class="el" href="classBeeeOn_1_1SystemTimeZoneImpl.html#ab2ad7f16e93c79e00c608af291bb6af1">BeeeOn::SystemTimeZoneImpl</a>
 , <a class="el" href="classBeeeOn_1_1TimeZone.html#a3e2652b305e97d35c95a54e0d01bb747">BeeeOn::TimeZone</a>
 , <a class="el" href="classBeeeOn_1_1TimeZoneImpl.html#aac2e37bc8c00c2534de89a51722a7a48">BeeeOn::TimeZoneImpl</a>
+, <a class="el" href="classBeeeOn_1_1WebSocketConnection.html#a793451a130b26bb9dd2569b65b5e62b1">BeeeOn::WebSocketConnection</a>
 </li>
 <li>ID_LENGTH64
 : <a class="el" href="classBeeeOn_1_1SessionManagerImpl.html#a8b49ebf7763055d5e5911a7aeb5667e8afa7a329e6c52e252e888a42d3db866db">BeeeOn::SessionManagerImpl</a>
@@ -84,6 +85,7 @@ $(function() {
 <li>initialize()
 : <a class="el" href="classBeeeOn_1_1PocoGlobDBInitializer.html#a6cabdd9431981b464e08d36f42867057">BeeeOn::PocoGlobDBInitializer</a>
 , <a class="el" href="classBeeeOn_1_1PocoSimpleDBInitializer.html#ace16c95cc6046a90f2551ea2e44bf9ae">BeeeOn::PocoSimpleDBInitializer</a>
+, <a class="el" href="classBeeeOn_1_1SlidingWindowRateLimiterFactory.html#a5d3a5e694c42062d72bb7eb30046208b">BeeeOn::SlidingWindowRateLimiterFactory</a>
 </li>
 <li>initRouting()
 : <a class="el" href="classBeeeOn_1_1RestRouter.html#af50ff165e8c48a0712cab947c6ff9254">BeeeOn::RestRouter</a>
@@ -123,6 +125,9 @@ $(function() {
 <li>iosReadUntil()
 : <a class="el" href="classBeeeOn_1_1ConsoleSessionImpl.html#a1c11d72f7cfafaa923bab6ab9e67a122">BeeeOn::ConsoleSessionImpl</a>
 </li>
+<li>ipAddress()
+: <a class="el" href="classBeeeOn_1_1GWGatewayRegister.html#a5d648aa25630ed37060448763778bfbe">BeeeOn::GWGatewayRegister</a>
+</li>
 <li>is()
 : <a class="el" href="classBeeeOn_1_1ClassInfo.html#a8108cdae43a31be0cdafb1515bf53e6e">BeeeOn::ClassInfo</a>
 </li>
@@ -138,6 +143,12 @@ $(function() {
 <li>isFailed()
 : <a class="el" href="classBeeeOn_1_1FailDetector.html#a11f39710e4de46e89cdcfd980e8ea19a">BeeeOn::FailDetector</a>
 </li>
+<li>isGatewayReadable()
+: <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#ab40be94d07a09e9e7d4a8347ddf00201">BeeeOn::DevicePropertyKeyEnum</a>
+</li>
+<li>isGatewayWritable()
+: <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a994639181ddd7d129532aefa1784225b">BeeeOn::DevicePropertyKeyEnum</a>
+</li>
 <li>isGoingToFail()
 : <a class="el" href="classBeeeOn_1_1FailDetector.html#af3b3fc376e90bfbe388503e861928006">BeeeOn::FailDetector</a>
 </li>
@@ -151,10 +162,16 @@ $(function() {
 , <a class="el" href="classNoTransaction.html#a081af12f7a1d96aa1ac1a633a06f2a4b">NoTransaction</a>
 </li>
 <li>isPathFromRoot()
-: <a class="el" href="classBeeeOn_1_1SAXHelper.html#af56dfcaa928b41b947a7f0864f90f27f">BeeeOn::SAXHelper</a>
+: <a class="el" href="classBeeeOn_1_1SAXHelper.html#adc205580fccf1e2272ae500404389917">BeeeOn::SAXHelper</a>
 </li>
 <li>isSame()
-: <a class="el" href="structBeeeOn_1_1DIWCastImpl.html#a61a1221f82174bd742fed3dad0cc8236">BeeeOn::DIWCastImpl&lt; From, To &gt;</a>
+: <a class="el" href="structBeeeOn_1_1DIWCastImpl.html#a7a7542dc5692a06498b817e652f3493e">BeeeOn::DIWCastImpl&lt; From, To &gt;</a>
+</li>
+<li>isUserReadable()
+: <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a186570109347d20297a3787184dca7a3">BeeeOn::DevicePropertyKeyEnum</a>
+</li>
+<li>isUserWritable()
+: <a class="el" href="structBeeeOn_1_1DevicePropertyKeyEnum.html#a00a89dcb3fbc458ef1d08db7f41d675d">BeeeOn::DevicePropertyKeyEnum</a>
 </li>
 <li>isValid()
 : <a class="el" href="classBeeeOn_1_1ModuleType_1_1Unit.html#aed6aae316b6d76b59e04f6a0b764a49e">BeeeOn::ModuleType::Unit</a>

@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -65,11 +65,11 @@ Inheritance diagram for BeeeOn::BuiltinRestHandler:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:a74eb60f08d9ba10f6b6ea2687ed561ab"><td class="memItemLeft" align="right" valign="top"><a id="a74eb60f08d9ba10f6b6ea2687ed561ab"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>unauthorized</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a74eb60f08d9ba10f6b6ea2687ed561ab"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1BuiltinRestHandler.html#a74eb60f08d9ba10f6b6ea2687ed561ab">unauthorized</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a74eb60f08d9ba10f6b6ea2687ed561ab"><td class="mdescLeft">&#160;</td><td class="mdescRight">It always returns HTTP code 401 and generates HTTP header WWW-Authenticate: Basic realm="BeeeOn Server" (the realm is configurable via the used <a class="el" href="classBeeeOn_1_1RestRouter.html">RestRouter</a>).  <a href="#a74eb60f08d9ba10f6b6ea2687ed561ab">More...</a><br /></td></tr>
 <tr class="separator:a74eb60f08d9ba10f6b6ea2687ed561ab"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a38a8bd0ae6e490aaf8eabe4a4200f0a3"><td class="memItemLeft" align="right" valign="top"><a id="a38a8bd0ae6e490aaf8eabe4a4200f0a3"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>noRoute</b> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memitem:a38a8bd0ae6e490aaf8eabe4a4200f0a3"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classBeeeOn_1_1BuiltinRestHandler.html#a38a8bd0ae6e490aaf8eabe4a4200f0a3">noRoute</a> (<a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;flow)</td></tr>
+<tr class="memdesc:a38a8bd0ae6e490aaf8eabe4a4200f0a3"><td class="mdescLeft">&#160;</td><td class="mdescRight">It always returns HTTP code 404.  <a href="#a38a8bd0ae6e490aaf8eabe4a4200f0a3">More...</a><br /></td></tr>
 <tr class="separator:a38a8bd0ae6e490aaf8eabe4a4200f0a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classBeeeOn_1_1JSONRestHandler"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classBeeeOn_1_1JSONRestHandler')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classBeeeOn_1_1JSONRestHandler.html">BeeeOn::JSONRestHandler</a></td></tr>
 <tr class="memitem:ab7354df39c5f622557c8d446c878cecf inherit pub_methods_classBeeeOn_1_1JSONRestHandler"><td class="memItemLeft" align="right" valign="top"><a id="ab7354df39c5f622557c8d446c878cecf"></a>
@@ -160,6 +160,59 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setupLogger</b> (Poco
 Poco::Logger &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>logger</b> () const</td></tr>
 <tr class="separator:a689ac76b94112bc55f9f528fc54a7d40 inherit pro_methods_classBeeeOn_1_1Loggable"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
+<h2 class="groupheader">Member Function Documentation</h2>
+<a id="a38a8bd0ae6e490aaf8eabe4a4200f0a3"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a38a8bd0ae6e490aaf8eabe4a4200f0a3">&#9670;&nbsp;</a></span>noRoute()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BuiltinRestHandler::noRoute </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>It always returns HTTP code 404. </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Poco::NotFoundException</td><td>- always </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
+<a id="a74eb60f08d9ba10f6b6ea2687ed561ab"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a74eb60f08d9ba10f6b6ea2687ed561ab">&#9670;&nbsp;</a></span>unauthorized()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void BuiltinRestHandler::unauthorized </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classBeeeOn_1_1RestFlow.html">RestFlow</a> &amp;&#160;</td>
+          <td class="paramname"><em>flow</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>It always returns HTTP code 401 and generates HTTP header WWW-Authenticate: Basic realm="BeeeOn Server" (the realm is configurable via the used <a class="el" href="classBeeeOn_1_1RestRouter.html">RestRouter</a>). </p>
+<dl class="exception"><dt>Exceptions</dt><dd>
+  <table class="exception">
+    <tr><td class="paramname">Poco::Net::NotAuthenticatedException</td><td>- always </td></tr>
+  </table>
+  </dd>
+</dl>
+
+</div>
+</div>
 <hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/src/rest/<a class="el" href="BuiltinRestHandler_8h_source.html">BuiltinRestHandler.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/src/rest/BuiltinRestHandler.cpp</li>

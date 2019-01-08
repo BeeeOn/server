@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -80,6 +80,15 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>setPassword</b> (cons
 <tr class="memitem:a2ea0fdf8d49992d4b602faaff36ab753"><td class="memItemLeft" align="right" valign="top"><a id="a2ea0fdf8d49992d4b602faaff36ab753"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setFirmware</b> (const std::string &amp;firmware)</td></tr>
 <tr class="separator:a2ea0fdf8d49992d4b602faaff36ab753"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f992a335d3bbcfa42754cf6898c23a4"><td class="memItemLeft" align="right" valign="top"><a id="a6f992a335d3bbcfa42754cf6898c23a4"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setMACAddress</b> (const <a class="el" href="classBeeeOn_1_1MACAddress.html">MACAddress</a> &amp;address, Poco::AutoPtr&lt; Poco::Crypto::Cipher &gt; cipher)</td></tr>
+<tr class="separator:a6f992a335d3bbcfa42754cf6898c23a4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a589d2138dff7322c6f78fc06cbf46f64"><td class="memItemLeft" align="right" valign="top"><a id="a589d2138dff7322c6f78fc06cbf46f64"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setSerial</b> (const uint64_t serial, Poco::AutoPtr&lt; Poco::Crypto::Cipher &gt; cipher)</td></tr>
+<tr class="separator:a589d2138dff7322c6f78fc06cbf46f64"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a916a78236ec39de67d244c8a63b9939f"><td class="memItemLeft" align="right" valign="top"><a id="a916a78236ec39de67d244c8a63b9939f"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>setFromString</b> (const std::string &amp;input, const <a class="el" href="classBeeeOn_1_1CryptoConfig.html">CryptoConfig</a> &amp;config)</td></tr>
+<tr class="separator:a916a78236ec39de67d244c8a63b9939f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a7b65ffd5f3a08d9fe9441433b14bc8ea"><td class="memItemLeft" align="right" valign="top"><a id="a7b65ffd5f3a08d9fe9441433b14bc8ea"></a>
 Poco::Net::IPAddress&#160;</td><td class="memItemRight" valign="bottom"><b>asIPAddress</b> (Poco::AutoPtr&lt; Poco::Crypto::Cipher &gt; cipher) const</td></tr>
 <tr class="separator:a7b65ffd5f3a08d9fe9441433b14bc8ea"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -89,6 +98,15 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>asPassword</b>
 <tr class="memitem:a020b6605a972f21c2b11266c02e18a0e"><td class="memItemLeft" align="right" valign="top"><a id="a020b6605a972f21c2b11266c02e18a0e"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>asFirmware</b> () const</td></tr>
 <tr class="separator:a020b6605a972f21c2b11266c02e18a0e"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a7a876eac47b1eca21a8f4b9eca41bcbe"><td class="memItemLeft" align="right" valign="top"><a id="a7a876eac47b1eca21a8f4b9eca41bcbe"></a>
+<a class="el" href="classBeeeOn_1_1MACAddress.html">MACAddress</a>&#160;</td><td class="memItemRight" valign="bottom"><b>asMACAddress</b> (Poco::AutoPtr&lt; Poco::Crypto::Cipher &gt; cipher) const</td></tr>
+<tr class="separator:a7a876eac47b1eca21a8f4b9eca41bcbe"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a545877d05290370785dc738e5980e347"><td class="memItemLeft" align="right" valign="top"><a id="a545877d05290370785dc738e5980e347"></a>
+uint64_t&#160;</td><td class="memItemRight" valign="bottom"><b>asSerial</b> (Poco::AutoPtr&lt; Poco::Crypto::Cipher &gt; cipher) const</td></tr>
+<tr class="separator:a545877d05290370785dc738e5980e347"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afa1101bb207f11f8063d39485f2c0204"><td class="memItemLeft" align="right" valign="top"><a id="afa1101bb207f11f8063d39485f2c0204"></a>
+std::string&#160;</td><td class="memItemRight" valign="bottom"><b>asString</b> (Poco::AutoPtr&lt; Poco::Crypto::Cipher &gt; cipher) const</td></tr>
+<tr class="separator:afa1101bb207f11f8063d39485f2c0204"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a078df52a4eb2c6c36d2364d515260369"><td class="memItemLeft" align="right" valign="top"><a id="a078df52a4eb2c6c36d2364d515260369"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>setParams</b> (const <a class="el" href="classBeeeOn_1_1CryptoParams.html">CryptoParams</a> &amp;params)</td></tr>
 <tr class="separator:a078df52a4eb2c6c36d2364d515260369"><td class="memSeparator" colspan="2">&#160;</td></tr>

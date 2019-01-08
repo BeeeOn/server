@@ -20,7 +20,7 @@
   <td id="projectlogo"><img alt="Logo" src="BeeeOn.png"/></td>
   <td id="projectalign" style="padding-left: 0.5em;">
    <div id="projectname">BeeeOn Server
-   &#160;<span id="projectnumber">v2018.07.1</span>
+   &#160;<span id="projectnumber">v2018.11.1</span>
    </div>
    <div id="projectbrief">Platform to interconnect the IoT world</div>
   </td>
@@ -163,8 +163,14 @@ Additional Inherited Members</h2></td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Represents a message sent by the gateway to the server, intended to requests a list of paired devices with a specific prefix. </p>
-<p><a class="el" href="classBeeeOn_1_1GWDeviceListRequest.html" title="Represents a message sent by the gateway to the server, intended to requests a list of paired devices...">GWDeviceListRequest</a> represents response to this request. </p>
-</div><hr/>The documentation for this class was generated from the following files:<ul>
+<p><a class="el" href="classBeeeOn_1_1GWDeviceListRequest.html" title="Represents a message sent by the gateway to the server, intended to requests a list of paired devices...">GWDeviceListRequest</a> represents response to this request.</p>
+<p>An example message: </p><pre>
+{
+  "id": "ffd0da59-5f6d-4363-b2ad-afa95ef85d59",
+  "message_type": "device_list_request",
+  "device_prefix": "vdev"
+}
+</pre> </div><hr/>The documentation for this class was generated from the following files:<ul>
 <li>/home/jviki/Projects/BeeeOn/server/base/src/gwmessage/<a class="el" href="GWDeviceListRequest_8h_source.html">GWDeviceListRequest.h</a></li>
 <li>/home/jviki/Projects/BeeeOn/server/base/src/gwmessage/GWDeviceListRequest.cpp</li>
 </ul>
