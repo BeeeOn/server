@@ -12,7 +12,6 @@
 #include "model/GlobalID.h"
 #include "rpc/GatewayRPC.h"
 #include "rpc/GatewayRPCResult.h"
-#include "transaction/Transactional.h"
 #include "util/CryptoConfig.h"
 #include "util/Loggable.h"
 #include "util/LambdaTimerTask.h"
@@ -36,7 +35,7 @@ class AsyncGatewayRPC :
 	public GatewayRPC,
 	public RPCForwarder,
 	public StoppableLoop,
-	public Transactional {
+	protected Loggable {
 public:
 	typedef Poco::SharedPtr<AsyncGatewayRPC> Ptr;
 

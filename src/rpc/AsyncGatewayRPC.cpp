@@ -14,7 +14,6 @@ BEEEON_OBJECT_CASTABLE(StoppableLoop)
 BEEEON_OBJECT_PROPERTY("gatewayCommunicator", &AsyncGatewayRPC::setGatewayCommunicator)
 BEEEON_OBJECT_PROPERTY("responseExpectedQueue", &AsyncGatewayRPC::setGWResponseExpectedQueue)
 BEEEON_OBJECT_PROPERTY("defaultTimeout", &AsyncGatewayRPC::setDefaultTimeout)
-BEEEON_OBJECT_PROPERTY("transactionManager", &AsyncGatewayRPC::setTransactionManager)
 BEEEON_OBJECT_PROPERTY("devicePropertyDao", &AsyncGatewayRPC::setDevicePropertyDao)
 BEEEON_OBJECT_PROPERTY("cryptoConfig", &AsyncGatewayRPC::setCryptoConfig)
 BEEEON_OBJECT_END(BeeeOn, AsyncGatewayRPC)
@@ -51,7 +50,7 @@ void AsyncGatewayRPC::pairDevice(GatewayRPCHandler::Ptr handler,
 
 	if (!m_cryptoConfig.isNull()) {
 		list<DeviceProperty> tmp;
-		BEEEON_TRANSACTION(m_propertyDao->fetchByDevice(tmp, device));
+		m_propertyDao->fetchByDevice(tmp, device);
 
 		for (const auto &property : tmp) {
 			if (!property.key().isGatewayReadable())
