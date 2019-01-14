@@ -33,6 +33,7 @@
 			<set name="gatewayRPC" ref="gatewayRPC" />
 			<set name="accessPolicy" ref="accessPolicy" />
 			<set name="transactionManager" ref="transactionManager" />
+			<set name="cryptoConfig" ref="devicePropertiesCryptoConfig" />
 			<set name="eventsExecutor" ref="eventsExecutor" />
 			<add name="listeners" ref="publishingWatcher" if-yes="${baf.publish.device.enable}" />
 		</instance>
