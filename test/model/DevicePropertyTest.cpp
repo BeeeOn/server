@@ -24,6 +24,8 @@ class DevicePropertyTest : public CppUnit::TestFixture {
 	CPPUNIT_TEST(testFirmware);
 	CPPUNIT_TEST(testNoIPAddress);
 	CPPUNIT_TEST(testIPAddress);
+	CPPUNIT_TEST(testNoMACAddress);
+	CPPUNIT_TEST(testMACAddress);
 	CPPUNIT_TEST(testNoPassword);
 	CPPUNIT_TEST(testPassword);
 	CPPUNIT_TEST_SUITE_END();
@@ -37,6 +39,8 @@ public:
 	void testFirmware();
 	void testNoIPAddress();
 	void testIPAddress();
+	void testNoMACAddress();
+	void testMACAddress();
 	void testNoPassword();
 	void testPassword();
 
@@ -145,6 +149,48 @@ void DevicePropertyTest::testIPAddress()
 	);
 
 	CPPUNIT_ASSERT(m_property.value() != "fdd7:b085:62e0::567:112:abc");
+}
+
+/**
+ * Test that when working with MAC Address the DevicePropertyKey::KEY_MAC_ADDRESS
+ * must be set properly.
+ */
+void DevicePropertyTest::testNoMACAddress()
+{
+	const CipherKey &key = m_params.randomKey();
+	AutoPtr<Cipher> cipher = m_factory.createCipher(key);
+
+	m_property.setParams(m_params);
+
+	CPPUNIT_ASSERT_THROW(
+		m_property.setMACAddress(MACAddress::parse("11:22:33:44:55:66"), cipher),
+		Poco::IllegalStateException
+	);
+	CPPUNIT_ASSERT_THROW(
+		m_property.asMACAddress(cipher),
+		Poco::IllegalStateException
+	);
+}
+
+/**
+ * Test MAC address can be set and read properly.
+ */
+void DevicePropertyTest::testMACAddress()
+{
+	const CipherKey &key = m_params.randomKey();
+	AutoPtr<Cipher> cipher = m_factory.createCipher(key);
+
+	m_property.setParams(m_params);
+	m_property.setKey(DevicePropertyKey::KEY_MAC_ADDRESS);
+
+	m_property.setMACAddress(MACAddress::parse("11:22:33:44:55:66"), cipher);
+
+	CPPUNIT_ASSERT_EQUAL(
+		"11:22:33:44:55:66",
+		m_property.asMACAddress(cipher).toString(':')
+	);
+
+	CPPUNIT_ASSERT(m_property.value() != "11:22:33:44:55:66");
 }
 
 /**

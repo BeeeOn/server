@@ -219,7 +219,7 @@ void DeviceProperty::setMACAddress(const MACAddress &address, AutoPtr<Cipher> ci
 	if (m_params.empty())
 		throw IllegalStateException("crypto params is empty for MAC address");
 
-	m_value = cipher->encryptString(address.toString(), Cipher::ENC_BASE64);
+	m_value = cipher->encryptString(address.toString(':'), Cipher::ENC_BASE64);
 }
 
 MACAddress DeviceProperty::asMACAddress(AutoPtr<Cipher> cipher) const
