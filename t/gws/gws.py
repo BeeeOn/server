@@ -4,7 +4,7 @@ import zmq
 import queue
 import threading
 
-def assureNotClosed(self, ws, timeout = 1):
+def assureNotClosed(self, ws, timeout = 2):
 	ws.timeout = timeout
 	with self.assertRaises(websocket.WebSocketTimeoutException):
 		ws.recv()
