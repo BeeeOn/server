@@ -25,13 +25,13 @@ public:
 	 *   {
 	 *     "id": "7ac2d962-72d0-496a-a8c3-d44074fef561",
 	 *     "identity_email": "user1@example.org",
-	 *     "access_level": 30,
+	 *     "access_level": "guest",
 	 *     "created": 1536682053
 	 *   },
 	 *   {
 	 *     "id": "68e41151-4d22-4509-bf04-4a8cc6b49e67",
 	 *     "identity_email": "joe@example.org",
-	 *     "access_level": 10,
+	 *     "access_level": "admin",
 	 *     "created": 1536672181
 	 *   }
 	 * ]
@@ -48,7 +48,7 @@ public:
 	 * {
 	 *   "id": "2bfd5682-ee89-409b-a27a-38e3e16fcc35",
 	 *   "identity_email": "john@example.org",
-	 *   "access_level": 10,
+	 *   "access_level": "admin",
 	 *   "created": 1536682231,
 	 *   "user": {
 	 *     "first_name": "John",
@@ -78,7 +78,7 @@ public:
 	 * <pre>
 	 * {
 	 *   "identity_email": "john@example.org",
-	 *   "access_level": 20
+	 *   "access_level": "user"
 	 * }
 	 * </pre>
 	 */
