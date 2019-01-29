@@ -482,8 +482,12 @@ void DeviceServiceImpl::removeUnusedDevices()
 		"removing unused devices...",
 		__FILE__, __LINE__);
 
-	size_t count = BEEEON_TRANSACTION_RETURN(size_t,
+	size_t count = 0;
+	try {
+		count = BEEEON_TRANSACTION_RETURN(size_t,
                                m_deviceDao->removeUnused());
+	}
+	BEEEON_CATCH_CHAIN(logger())
 
 	if (count > 0) {
 		logger().warning("removed "
