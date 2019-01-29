@@ -478,6 +478,10 @@ void DeviceServiceImpl::doListProperties(Relation<list<DeviceProperty>, Device> 
 
 void DeviceServiceImpl::removeUnusedDevices()
 {
+	logger().information(
+		"removing unused devices...",
+		__FILE__, __LINE__);
+
 	size_t count = BEEEON_TRANSACTION_RETURN(size_t,
                                m_deviceDao->removeUnused());
 
@@ -485,6 +489,11 @@ void DeviceServiceImpl::removeUnusedDevices()
 		logger().warning("removed "
 				+ to_string(count)
 				+ " unused devices",
+			__FILE__, __LINE__);
+	}
+	else {
+		logger().information(
+			"no device was removed",
 			__FILE__, __LINE__);
 	}
 }
